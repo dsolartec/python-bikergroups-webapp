@@ -1,6 +1,7 @@
 from flask import Flask
 
-from app.blueprints.ping_views import ping_views
+from src.adapters.http.views.ping_views import ping_views
+
 
 def create_app():
     app = Flask(__name__)
