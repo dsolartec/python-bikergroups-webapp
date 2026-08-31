@@ -1,8 +1,10 @@
 from psycopg2.errors import UniqueViolation
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.adapters.outputs.datasources.postgresql_entities.user_entity import UserEntity
+from app.domain.exceptions.not_found_exception import NotFoundException
 from app.domain.exceptions.username_already_exists_exception import UsernameAlreadyExistsException
 from app.domain.models.user_model import UserModel
 from app.domain.ports.repositories.user_repository import UserRepository
@@ -13,6 +15,16 @@ class PostgreSQLUserRepository(UserRepository):
 
     def __init__(self, session: Session):
         self._session = session
+
+    def get_by_username(self, username: str) -> UserModel:
+        user_entity = self._session.execute(
+            select(UserEntity)
+                .where(UserEntity.username == username),
+        ).scalar_one_or_none()
+        if user_entity is None:
+            raise NotFoundException("User not found")
+
+        return user_entity.to_model()
 
     def save(self, user: UserModel) -> UserModel:
         user_entity = UserEntity.from_model(user)
