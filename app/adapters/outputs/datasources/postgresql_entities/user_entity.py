@@ -31,22 +31,12 @@ class UserEntity(BaseEntity):
 
     @staticmethod
     def from_model(user: UserModel) -> UserEntity:
-        args: dict[str, any] = {
-            "username": user.username,
-            "display_name": user.display_name,
-        }
-
+        args = user.model_dump(exclude_none=True)
         if user.id is not None:
             args["id"] = UUID(user.id)
 
         if user.password is not None:
             args["password"] = user.password
-
-        if user.created_at is not None:
-            args["created_at"] = user.created_at
-
-        if user.updated_at is not None:
-            args["updated_at"] = user.updated_at
 
         return UserEntity(**args)
 
