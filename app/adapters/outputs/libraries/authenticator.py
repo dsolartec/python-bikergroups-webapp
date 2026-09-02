@@ -32,7 +32,7 @@ class Authenticator(AbstractAuthenticator):
             username: str,
     ) -> str:
         return self._jwt.encode(AccessTokenModel(
-            expiration_timestamp=get_int_from_datetime(datetime.now(timezone.utc) + timedelta(hours=12)),
+            expiration_timestamp=get_int_from_datetime(datetime.now(timezone.utc) + timedelta(hours=8)),
             generation_timestamp=get_int_from_datetime(datetime.now(timezone.utc)),
             permissions_names=permissions_names,
             user_id=user_id,
@@ -41,7 +41,7 @@ class Authenticator(AbstractAuthenticator):
  
     def generate_refresh_token(self, user_id: str) -> str:
         return self._jwt.encode(RefreshTokenModel(
-            expiration_timestamp=get_int_from_datetime(datetime.now(timezone.utc) + timedelta(hours=12)),
+            expiration_timestamp=get_int_from_datetime(datetime.now(timezone.utc) + timedelta(days=30)),
             generation_timestamp=get_int_from_datetime(datetime.now(timezone.utc)),
             user_id=user_id,
         ).model_dump(), self._refresh_token_signing_key)
