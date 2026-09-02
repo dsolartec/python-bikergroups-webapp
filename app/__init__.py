@@ -1,6 +1,7 @@
 from http import HTTPStatus
 
 from flask import Flask, jsonify
+from pydantic import ValidationError
 
 from app.adapters.inputs.apis.auth_views import auth_views
 from app.adapters.inputs.apis.ping_views import ping_views
@@ -10,6 +11,17 @@ from app.domain.exceptions.base_http_exception import BaseHTTPException
 def error_middleware(e: Exception):
     if isinstance(e, BaseHTTPException):
         return jsonify(e.to_dict()), e.status_code
+
+    if isinstance(e, ValidationError):
+        return jsonify({
+            "validations": [
+                {
+                    "field": ", ".join(error["loc"]),
+                    "message": error["msg"],
+                }
+                for error in e.errors()
+            ]
+        }), HTTPStatus.BAD_REQUEST
 
     return jsonify({
         "message": "Internal server error",
