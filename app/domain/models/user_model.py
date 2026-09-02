@@ -2,6 +2,8 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field
 
+from app.domain.models.permission_model import PermissionModel
+
 
 class UserModel(BaseModel):
     # Common properties
@@ -18,3 +20,7 @@ class UserModel(BaseModel):
 
     created_at: datetime | None
     updated_at: datetime | None
+
+    # Relationships
+
+    permissions: list[PermissionModel]

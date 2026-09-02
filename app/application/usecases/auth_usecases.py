@@ -16,7 +16,7 @@ class AuthUseCases:
     ) -> tuple[str, str]:
         with container.unit_of_work() as uow:
             try:
-                user = uow.user_repository.get_by_username(cmd.username)
+                user = uow.user_repository.get_by_username(cmd.username, with_permissions=True)
             except NotFoundException as nfe:
                 raise WrongCredentialsException() from nfe
 
@@ -25,7 +25,12 @@ class AuthUseCases:
 
             authenticator = container.authenticator()
 
-            access_token = authenticator.generate_access_token(user.id, user.username)
+            access_token = authenticator.generate_access_token(
+                permissions_names=[permission.name for permission in user.permissions],
+                user_id=user.id,
+                username=user.username,
+            )
+
             refresh_token = authenticator.generate_refresh_token(user.id)
 
             return access_token, refresh_token

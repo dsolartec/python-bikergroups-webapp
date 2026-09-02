@@ -1,10 +1,12 @@
 from datetime import datetime
+from typing import List
 from uuid import UUID
 
-from sqlalchemy import String, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import String, func, inspect
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.adapters.outputs.datasources.postgresql_entities.base_entity import BaseEntity
+from app.adapters.outputs.datasources.postgresql_entities.permission_entity import PermissionEntity
 from app.domain.models.user_model import UserModel
 
 
@@ -29,6 +31,10 @@ class UserEntity(BaseEntity):
         server_default=func.current_timestamp(),
     )
 
+    # Relationships
+
+    permissions: Mapped[List["PermissionEntity"]] = relationship(lazy="raise", secondary="users_permissions")
+
     @staticmethod
     def from_model(user: UserModel) -> UserEntity:
         args = user.model_dump(exclude_none=True)
@@ -41,6 +47,9 @@ class UserEntity(BaseEntity):
         return UserEntity(**args)
 
     def to_model(self) -> UserModel:
+        insp = inspect(self)
+        permissions_loaded = "permissions" not in insp.unloaded
+
         return UserModel(
             # Common columns
             id=str(self.id),
@@ -53,4 +62,7 @@ class UserEntity(BaseEntity):
             # System columns
             created_at=self.created_at,
             updated_at=self.updated_at,
+
+            # Relationships
+            permissions=[permission.to_model() for permission in self.permissions] if permissions_loaded else [],
         )

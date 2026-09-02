@@ -6,7 +6,7 @@ from app.domain.models.refresh_token_model import RefreshTokenModel
 
 class AbstractAuthenticator(ABC):
     @abstractmethod
-    def generate_access_token(self, user_id: str, username: str) -> str:
+    def generate_access_token(self, permissions_names: list[str], user_id: str, username: str) -> str:
         raise NotImplementedError
 
     @abstractmethod

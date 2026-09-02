@@ -1,7 +1,7 @@
 from psycopg2.errors import UniqueViolation
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.adapters.outputs.datasources.postgresql_entities.user_entity import UserEntity
 from app.domain.exceptions.not_found_exception import NotFoundException
@@ -16,11 +16,12 @@ class PostgreSQLUserRepository(UserRepository):
     def __init__(self, session: Session):
         self._session = session
 
-    def get_by_username(self, username: str) -> UserModel:
-        user_entity = self._session.execute(
-            select(UserEntity)
-                .where(UserEntity.username == username),
-        ).scalar_one_or_none()
+    def get_by_username(self, username: str, with_permissions: bool = False) -> UserModel:
+        statement = select(UserEntity).where(UserEntity.username == username)
+        if with_permissions:
+            statement = statement.options(selectinload(UserEntity.permissions))
+
+        user_entity = self._session.execute(statement).scalar_one_or_none()
         if user_entity is None:
             raise NotFoundException("User not found")
 

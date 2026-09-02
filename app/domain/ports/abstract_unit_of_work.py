@@ -34,5 +34,13 @@ class AbstractUnitOfWork(ABC):
         self.rollback()
 
     @property
+    def permission_repository(self) -> PermissionRepository:
+        return self._permission_repository
+
+    @property
+    def user_permission_repository(self) -> UserPermissionRepository:
+        return self._user_permission_repository
+
+    @property
     def user_repository(self) -> UserRepository:
         return self._user_repository

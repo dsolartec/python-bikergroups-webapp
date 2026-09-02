@@ -1,7 +1,7 @@
 import base64
 from datetime import datetime, timedelta, timezone
 
-from jwt import AbstractJWKBase, JWT, jwk, jwk_from_dict
+from jwt import AbstractJWKBase, JWT, jwk_from_dict
 from jwt.utils import get_int_from_datetime
 
 from app.domain.models.access_token_model import AccessTokenModel
@@ -27,16 +27,18 @@ class Authenticator(AbstractAuthenticator):
 
     def generate_access_token(
             self,
+            permissions_names: list[str],
             user_id: str,
             username: str,
-    ) -> str:        
+    ) -> str:
         return self._jwt.encode(AccessTokenModel(
             expiration_timestamp=get_int_from_datetime(datetime.now(timezone.utc) + timedelta(hours=12)),
             generation_timestamp=get_int_from_datetime(datetime.now(timezone.utc)),
+            permissions_names=permissions_names,
             user_id=user_id,
             username=username,
         ).model_dump(), self._access_token_signing_key)
-
+ 
     def generate_refresh_token(self, user_id: str) -> str:
         return self._jwt.encode(RefreshTokenModel(
             expiration_timestamp=get_int_from_datetime(datetime.now(timezone.utc) + timedelta(hours=12)),
