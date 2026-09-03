@@ -5,6 +5,10 @@ from app.domain.models.user_model import UserModel
 
 class UserRepository(ABC):
     @abstractmethod
+    def get_by_id(self, user_id: str, with_permissions: bool = False) -> UserModel:
+        raise NotImplementedError
+
+    @abstractmethod
     def get_by_username(self, username: str, with_permissions: bool = False) -> UserModel:
         raise NotImplementedError
 

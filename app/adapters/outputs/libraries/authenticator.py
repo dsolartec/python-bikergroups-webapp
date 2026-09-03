@@ -51,19 +51,25 @@ class Authenticator(AbstractAuthenticator):
             token_string: str,
             do_time_check: bool = True,
     ) -> AccessTokenModel:
-        return AccessTokenModel.model_validate(self._jwt.decode(
-            token_string,
-            self._access_token_signing_key,
-            do_time_check=do_time_check,
-        ))
+        return AccessTokenModel.model_validate(
+            self._jwt.decode(
+                token_string,
+                self._access_token_signing_key,
+                do_time_check=do_time_check,
+            ),
+            by_alias=True,
+        )
 
     def parse_refresh_token(
             self,
             token_string: str,
             do_time_check: bool = True,
     ) -> RefreshTokenModel:
-        return RefreshTokenModel.model_validate(self._jwt.decode(
-            token_string,
-            self._refresh_token_signing_key,
-            do_time_check=do_time_check,
-        ))
+        return RefreshTokenModel.model_validate(
+            self._jwt.decode(
+                token_string,
+                self._refresh_token_signing_key,
+                do_time_check=do_time_check,
+            ),
+            by_alias=True,
+        )
