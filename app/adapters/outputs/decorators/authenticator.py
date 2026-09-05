@@ -5,6 +5,7 @@ from flask import request
 from jwt.exceptions import JWTDecodeError
 
 from app.adapters.container import Container
+from app.domain.exceptions.not_found_exception import NotFoundException
 from app.domain.exceptions.unauthorized_exception import UnauthorizedException
 
 
@@ -12,7 +13,8 @@ def authenticator(
         permission_names: list[str],
         do_time_check: bool = True,
 ) -> Callable[[Any], Any]:
-    authenticator = Container().authenticator()
+    container = Container()
+    authenticator = container.authenticator()
 
     def wrapper(fn: Callable[..., Any]) -> Callable[..., Any]:
         @wraps(fn)
@@ -26,6 +28,12 @@ def authenticator(
                     token_string.replace("Bearer ", "", 1),
                     do_time_check=do_time_check,
                 )
+
+                with container.unit_of_work() as uow:
+                    try:
+                        uow.user_repository.get_by_id(access_token.user_id)
+                    except NotFoundException:
+                        raise UnauthorizedException("Invalid access token")
 
                 kwargs["logged_access_token"] = access_token
             except JWTDecodeError as de:
