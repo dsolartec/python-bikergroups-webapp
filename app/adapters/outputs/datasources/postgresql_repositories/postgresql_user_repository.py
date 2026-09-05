@@ -23,7 +23,7 @@ class PostgreSQLUserRepository(UserRepository):
         if with_permissions:
             statement = statement.options(selectinload(UserEntity.permissions))
 
-        user_entity = self._session.execute(statement).scalar_one_or_none()
+        user_entity = self._session.scalar(statement)
         if user_entity is None:
             raise NotFoundException("User not found")
 
@@ -34,7 +34,7 @@ class PostgreSQLUserRepository(UserRepository):
         if with_permissions:
             statement = statement.options(selectinload(UserEntity.permissions))
 
-        user_entity = self._session.execute(statement).scalar_one_or_none()
+        user_entity = self._session.scalar(statement)
         if user_entity is None:
             raise NotFoundException("User not found")
 
