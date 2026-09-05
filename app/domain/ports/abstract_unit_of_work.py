@@ -1,11 +1,13 @@
 from abc import ABC, abstractmethod
 from typing import Iterable
 
+from app.domain.ports.repositories.roadtrip_repository import RoadTripRepository
 from app.domain.ports.repositories.user_permission_repository import UserPermissionRepository
 from app.domain.ports.repositories.user_repository import UserRepository
 
 
 class AbstractUnitOfWork(ABC):
+    _roadtrip_repository: RoadTripRepository
     _user_permission_repository: UserPermissionRepository
     _user_repository: UserRepository
 
@@ -30,6 +32,10 @@ class AbstractUnitOfWork(ABC):
 
     def __exit__(self, *args):
         self.rollback()
+
+    @property
+    def roadtrip_repository(self) -> RoadTripRepository:
+        return self._roadtrip_repository
 
     @property
     def user_permission_repository(self) -> UserPermissionRepository:

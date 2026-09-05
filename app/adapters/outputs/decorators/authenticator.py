@@ -26,6 +26,8 @@ def authenticator(
                     token_string.replace("Bearer ", "", 1),
                     do_time_check=do_time_check,
                 )
+
+                kwargs["logged_access_token"] = access_token
             except JWTDecodeError as de:
                 raise UnauthorizedException(str(de)) from de
 

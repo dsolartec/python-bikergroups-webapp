@@ -11,6 +11,7 @@ from app.bootstrap import bootstrap
 from app.domain.commands.refresh_command import RefreshTokenCommand
 from app.domain.commands.signin_command import SignInCommand
 from app.domain.commands.signup_command import SignUpCommand
+from app.domain.models.access_token_model import AccessTokenModel
 
 
 auth_views = Blueprint("auth_views", __name__, url_prefix="/api/auth")
@@ -19,7 +20,7 @@ message_bus = bootstrap()
 
 @auth_views.post("/refresh")
 @authenticator(permission_names=[], do_time_check=False)
-def refresh_token():
+def refresh_token(logged_access_token: AccessTokenModel):
     payload = RefreshRequestBody.model_validate(request.get_json(silent=True) or {})
 
     access_token: str
