@@ -8,9 +8,9 @@ from app.domain.models.permission_model import PermissionModel
 class UserModel(BaseModel):
     # Common properties
 
-    id: str | None
+    id: str | None = Field(default=None)
     phone: str
-    password: str | None = Field(exclude=True)
+    password: str | None = Field(default=None, exclude=True)
 
     # Profile properties
 
@@ -18,8 +18,8 @@ class UserModel(BaseModel):
 
     # System properties
 
-    created_at: datetime | None
-    updated_at: datetime | None
+    created_at: datetime | None = Field(default=None)
+    updated_at: datetime | None = Field(default=None)
 
     # Relationships
 

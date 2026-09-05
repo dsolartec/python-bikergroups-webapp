@@ -1,7 +1,7 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class UserPermissionModel(BaseModel):
-    id: str
+    id: str | None = Field(default=None)
     permission_id: str
     user_id: str

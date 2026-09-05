@@ -73,14 +73,9 @@ class AuthUseCases:
             password_hash = container.encription().hash_password(cmd.password)
 
             user = uow.user_repository.save(UserModel(
-                id=None,
-                phone=cmd.phone,
-                password=password_hash,
-
                 display_name=cmd.display_name,
-
-                created_at=None,
-                updated_at=None,
+                password=password_hash,
+                phone=cmd.phone,
             ))
 
             access_token = authenticator.generate_access_token(

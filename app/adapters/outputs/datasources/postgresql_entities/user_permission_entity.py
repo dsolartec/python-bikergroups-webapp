@@ -16,11 +16,15 @@ class UserPermissionEntity(BaseEntity):
 
     @staticmethod
     def from_model(user_permission: UserPermissionModel) -> UserPermissionEntity:
-        return UserPermissionEntity(
-            id=UUID(user_permission.id),
-            permission_id=UUID(user_permission.permission_id),
-            user_id=UUID(user_permission.user_id),
-        )
+        args: dict[str, any] = {
+            "permission_id": UUID(user_permission.permission_id),
+            "user_id": UUID(user_permission.user_id),
+        }
+
+        if user_permission.id is not None:
+            args["id"] = UUID(user_permission.id)
+
+        return UserPermissionEntity(**args)
 
     def to_model(self) -> UserPermissionModel:
         return UserPermissionModel(

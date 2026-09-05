@@ -18,7 +18,6 @@ class RoadTripsUseCases:
     ) -> RoadTripModel:
         with container.unit_of_work() as uow:
             return uow.roadtrip_repository.save(RoadTripModel(
-                id=None,
                 display_name=cmd.display_name,
 
                 start_at=cmd.start_at,
@@ -27,10 +26,7 @@ class RoadTripsUseCases:
                 end_coordinates=cmd.end_coordinates,
 
                 # System properties
-                created_at=None,
                 created_by=cmd.actor_id,
-
-                updated_at=None,
                 updated_by=cmd.actor_id,
             ))
 
