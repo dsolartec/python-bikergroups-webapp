@@ -1,5 +1,5 @@
 # Upload directories
-public/roadtrips/*.jpeg
+app/static/images/roadtrips/*.jpeg
 
 # Logging
 *.log

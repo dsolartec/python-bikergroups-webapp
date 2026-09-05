@@ -80,7 +80,7 @@ class RoadTripsUseCases:
         with container.unit_of_work() as uow:
             roadtrip = uow.roadtrip_repository.get_by_id(cmd.roadtrip_id)
 
-            file.save(f"./public/roadtrips/{cmd.roadtrip_id}.jpeg")
+            file.save(f"./app/static/images/roadtrips/{cmd.roadtrip_id}.jpeg")
 
             roadtrip.updated_by = cmd.actor_id
             uow.roadtrip_repository.update(roadtrip)
