@@ -23,4 +23,4 @@ class UserModel(BaseModel):
 
     # Relationships
 
-    permissions: list[PermissionModel] = Field(default=[])
+    permissions: list[PermissionModel] = Field(default=[], exclude=True)

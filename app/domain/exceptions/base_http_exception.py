@@ -1,4 +1,5 @@
 from http import HTTPStatus
+from typing import Any
 
 
 class BaseHTTPException(Exception):
@@ -17,7 +18,7 @@ class BaseHTTPException(Exception):
     def status_code(self) -> HTTPStatus:
         return self._status_code
 
-    def to_dict(self) -> dict[str, any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "message": str(self),
             "success": False,

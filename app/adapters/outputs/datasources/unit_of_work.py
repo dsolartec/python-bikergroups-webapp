@@ -4,6 +4,7 @@ from sqlalchemy import Engine, QueuePool, create_engine
 from sqlalchemy.orm import Session, scoped_session, sessionmaker
 
 from app.adapters.outputs.datasources.postgresql_entities.base_entity import BaseEntity
+from app.adapters.outputs.datasources.postgresql_repositories.postgresql_audit_log_repository import PostgreSQLAuditLogRepository
 from app.adapters.outputs.datasources.postgresql_repositories.postgresql_roadtrip_repository import PostgreSQLRoadTripRepository
 from app.adapters.outputs.datasources.postgresql_repositories.postgresql_user_permission_repository import PostgreSQLUserPermissionRepository
 from app.adapters.outputs.datasources.postgresql_repositories.postgresql_user_repository import PostgreSQLUserRepository
@@ -32,6 +33,7 @@ class UnitOfWork(AbstractUnitOfWork):
     def __enter__(self):
         self._postgresql_session = self._postgresql_session
 
+        self._audit_log_repository = PostgreSQLAuditLogRepository(self._postgresql_session)
         self._roadtrip_repository = PostgreSQLRoadTripRepository(self._postgresql_session)
         self._user_permission_repository = PostgreSQLUserPermissionRepository(self._postgresql_session)
         self._user_repository = PostgreSQLUserRepository(self._postgresql_session)

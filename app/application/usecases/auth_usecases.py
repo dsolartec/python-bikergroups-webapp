@@ -1,9 +1,11 @@
 from app.domain.commands.refresh_command import RefreshTokenCommand
 from app.domain.commands.signin_command import SignInCommand
 from app.domain.commands.signup_command import SignUpCommand
+from app.domain.enums.audit_log_action_enum import AuditLogActionEnum
 from app.domain.exceptions.not_found_exception import NotFoundException
 from app.domain.exceptions.unauthorized_exception import UnauthorizedException
 from app.domain.exceptions.wrong_credentials_exception import WrongCredentialsException
+from app.domain.models.audit_log_model import AuditLogModel
 from app.domain.models.user_model import UserModel
 from app.domain.ports.abstract_container import AbstractContainer
 from app.domain.ports.abstract_message_bus import AbstractMessageBus
@@ -59,6 +61,11 @@ class AuthUseCases:
 
             refresh_token = authenticator.generate_refresh_token(user.id)
 
+            uow.audit_log_repository.save(AuditLogModel(
+                actor_id=user.id,
+                action=AuditLogActionEnum.SIGN_IN,
+            ))
+
             return access_token, refresh_token
 
     @staticmethod
@@ -85,5 +92,10 @@ class AuthUseCases:
             )
 
             refresh_token = authenticator.generate_refresh_token(user.id)
+
+            uow.audit_log_repository.save(AuditLogModel(
+                actor_id=user.id,
+                action=AuditLogActionEnum.SIGN_UP,
+            ))
 
             return access_token, refresh_token

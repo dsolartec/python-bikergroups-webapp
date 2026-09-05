@@ -1,4 +1,4 @@
-from typing import Callable, Type
+from typing import Any, Callable, Type
 
 from app.domain.commands.base_command import BaseCommand
 from app.domain.ports.abstract_container import AbstractContainer
@@ -14,6 +14,6 @@ class MessageBus(AbstractMessageBus):
         self._container = container
         self._command_handlers = command_handlers
 
-    def _handle_command(self, command: BaseCommand) -> any:
+    def _handle_command(self, command: BaseCommand) -> Any:
         handler = self._command_handlers[type(command)]
         return handler(command, self)

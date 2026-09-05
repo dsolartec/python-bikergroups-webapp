@@ -1,3 +1,4 @@
+from typing import Any
 from uuid import UUID
 
 from sqlalchemy import ForeignKey, func
@@ -16,7 +17,7 @@ class UserPermissionEntity(BaseEntity):
 
     @staticmethod
     def from_model(user_permission: UserPermissionModel) -> UserPermissionEntity:
-        args: dict[str, any] = {
+        args: dict[str, Any] = {
             "permission_id": UUID(user_permission.permission_id),
             "user_id": UUID(user_permission.user_id),
         }
