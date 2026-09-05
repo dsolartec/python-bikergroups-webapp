@@ -1,8 +1,7 @@
-from datetime import datetime
-
 from pydantic import BaseModel, Field
 
 from app.domain.models.permission_model import PermissionModel
+from app.domain.types import FormattedDateTime
 
 
 class UserModel(BaseModel):
@@ -18,8 +17,8 @@ class UserModel(BaseModel):
 
     # System properties
 
-    created_at: datetime | None = Field(default=None)
-    updated_at: datetime | None = Field(default=None)
+    created_at: FormattedDateTime | None = Field(default=None)
+    updated_at: FormattedDateTime | None = Field(default=None)
 
     # Relationships
 

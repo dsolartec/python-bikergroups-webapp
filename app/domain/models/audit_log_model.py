@@ -1,9 +1,9 @@
-from datetime import datetime
 from typing import Any
 
 from pydantic import BaseModel, Field
 
 from app.domain.enums.audit_log_action_enum import AuditLogActionEnum
+from app.domain.types import FormattedDateTime
 
 
 class AuditLogModel(BaseModel):
@@ -11,4 +11,4 @@ class AuditLogModel(BaseModel):
     actor_id: str
     action: AuditLogActionEnum
     metadata: dict[str, Any] | None = Field(default=None)
-    created_at: datetime | None = Field(default=None)
+    created_at: FormattedDateTime | None = Field(default=None)
