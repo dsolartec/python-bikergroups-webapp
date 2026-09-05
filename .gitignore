@@ -4,6 +4,9 @@ public/roadtrips/*.jpeg
 # Logging
 *.log
 
+# MacOS
+.DS_Store
+
 # IDEs
 .vscode/
 
