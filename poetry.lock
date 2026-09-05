@@ -491,6 +491,17 @@ dev = ["black", "isort", "mypy", "types-freezegun"]
 test = ["freezegun", "pytest (>=6.0,<7.0)", "pytest-cov"]
 
 [[package]]
+name = "logging"
+version = "0.4.9.6"
+description = "A logging module for Python"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "logging-0.4.9.6.tar.gz", hash = "sha256:26f6b50773f085042d301085bd1bf5d9f3735704db9f37c1ce6d8b85c38f2417"},
+]
+
+[[package]]
 name = "markupsafe"
 version = "3.0.3"
 description = "Safely add untrusted strings to HTML/XML markup."
@@ -984,4 +995,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.14"
-content-hash = "156a1c3acf161d44a05863ed535ac4c837bfdacb447fe723531dbde7c5966362"
+content-hash = "915ba225ea91d1aec3cf2930e49f8cf0fe0280aeb38103544159a5fe0c96918a"
