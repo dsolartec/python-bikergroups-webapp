@@ -32,7 +32,7 @@ class PostgreSQLRoadTripRepository(RoadTripRepository):
             select(RoadTripEntity) \
                 .limit(limit) \
                     .offset(offset) \
-                        .order_by(RoadTripEntity.start_at),
+                        .order_by(RoadTripEntity.start_at.desc()),
         ).all()
 
         return [roadtrip_entity.to_model() for roadtrip_entity in roadtrips_entities]
