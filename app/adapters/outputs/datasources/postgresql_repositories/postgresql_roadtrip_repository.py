@@ -1,7 +1,7 @@
 from datetime import datetime
 from uuid import UUID
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.adapters.outputs.datasources.postgresql_entities.roadtrip_entity import RoadTripEntity
@@ -17,14 +17,25 @@ class PostgreSQLRoadTripRepository(RoadTripRepository):
     def __init__(self, session: Session):
         self._session = session
 
+    def count(self) -> int:
+        return self._session.scalar(select(func.count()).select_from(RoadTripEntity)) or 0
+
     def get_by_id(self, roadtrip_id: str) -> RoadTripModel:
-        roadtrip_entity = self._session.execute(
-            select(RoadTripEntity).where(RoadTripEntity.id == UUID(roadtrip_id))
-        ).scalar_one_or_none()
+        roadtrip_entity = self._session.scalar(select(RoadTripEntity).where(RoadTripEntity.id == UUID(roadtrip_id)))
         if roadtrip_entity is None:
             raise NotFoundException("Roadtrip not found")
 
         return roadtrip_entity.to_model()
+
+    def get_many(self, limit: int, offset: int) -> list[RoadTripModel]:
+        roadtrips_entities = self._session.scalars(
+            select(RoadTripEntity) \
+                .limit(limit) \
+                    .offset(offset) \
+                        .order_by(RoadTripEntity.start_at),
+        ).all()
+
+        return [roadtrip_entity.to_model() for roadtrip_entity in roadtrips_entities]
 
     def save(self, roadtrip: RoadTripModel) -> RoadTripModel:
         roadtrip_entity = RoadTripEntity.from_model(roadtrip)

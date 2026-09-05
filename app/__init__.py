@@ -7,6 +7,7 @@ from pydantic import ValidationError
 from app.adapters.inputs.apis.auth_views import auth_views
 from app.adapters.inputs.apis.ping_views import ping_views
 from app.adapters.inputs.apis.roadtrip_views import roadtrip_views
+from app.adapters.inputs.apis.roadtrips_views import roadtrips_views
 from app.domain.exceptions.base_http_exception import BaseHTTPException
 
 
@@ -46,6 +47,7 @@ def create_app():
     app.register_blueprint(ping_views)
     app.register_blueprint(auth_views)
     app.register_blueprint(roadtrip_views)
+    app.register_blueprint(roadtrips_views)
 
     app.register_error_handler(Exception, error_middleware)
 
