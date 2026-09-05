@@ -7,6 +7,7 @@ from app.domain.commands.create_one_roadtrip_command import CreateOneRoadTripCom
 from app.domain.commands.refresh_command import RefreshTokenCommand
 from app.domain.commands.signin_command import SignInCommand
 from app.domain.commands.signup_command import SignUpCommand
+from app.domain.commands.update_roadtrip_photo_command import UpdateRoadTripPhotoCommand
 
 
 COMMAND_HANDLERS: dict[Type[BaseCommand], Callable] = {
@@ -17,4 +18,5 @@ COMMAND_HANDLERS: dict[Type[BaseCommand], Callable] = {
 
     # Roadtrips usecases
     CreateOneRoadTripCommand: RoadTripsUseCases.create_one,
+    UpdateRoadTripPhotoCommand: RoadTripsUseCases.update_photo,
 }

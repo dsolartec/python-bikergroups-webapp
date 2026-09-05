@@ -1,6 +1,12 @@
+from datetime import datetime
+from uuid import UUID
+
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.adapters.outputs.datasources.postgresql_entities.roadtrip_entity import RoadTripEntity
+from app.domain.exceptions.bad_request_exception import BadRequestException
+from app.domain.exceptions.not_found_exception import NotFoundException
 from app.domain.models.roadtrip_model import RoadTripModel
 from app.domain.ports.repositories.roadtrip_repository import RoadTripRepository
 
@@ -11,6 +17,15 @@ class PostgreSQLRoadTripRepository(RoadTripRepository):
     def __init__(self, session: Session):
         self._session = session
 
+    def get_by_id(self, roadtrip_id: str) -> RoadTripModel:
+        roadtrip_entity = self._session.execute(
+            select(RoadTripEntity).where(RoadTripEntity.id == UUID(roadtrip_id))
+        ).scalar_one_or_none()
+        if roadtrip_entity is None:
+            raise NotFoundException("Roadtrip not found")
+
+        return roadtrip_entity.to_model()
+
     def save(self, roadtrip: RoadTripModel) -> RoadTripModel:
         roadtrip_entity = RoadTripEntity.from_model(roadtrip)
 
@@ -19,3 +34,18 @@ class PostgreSQLRoadTripRepository(RoadTripRepository):
         self._session.refresh(roadtrip_entity)
 
         return roadtrip_entity.to_model()
+
+    def update(self, roadtrip: RoadTripModel) -> None:
+        if roadtrip.id is None:
+            raise NotFoundException("Roadtrip not found")
+
+        if roadtrip.updated_by is None:
+            raise BadRequestException("Roadtrip update requires an actor")
+
+        roadtrip.updated_at = datetime.now()
+
+        self._session.query(RoadTripEntity) \
+            .filter(RoadTripEntity.id == UUID(roadtrip.id)) \
+                .update(roadtrip.model_dump(exclude=["id"], exclude_none=True))
+
+        self._session.commit()

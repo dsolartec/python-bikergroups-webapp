@@ -1,3 +1,6 @@
+# Upload directories
+public/roadtrips/*.jpeg
+
 # IDEs
 .vscode/
 

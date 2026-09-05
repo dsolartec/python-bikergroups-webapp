@@ -31,6 +31,8 @@ def error_middleware(e: Exception):
 
 def create_app():
     app = Flask(__name__)
+
+    app.config["MAX_CONTENT_LENGTH"] = 16 * 1000 * 1000 # Max 16mb per file
     app.url_map.strict_slashes = False
 
     app.register_blueprint(ping_views)
