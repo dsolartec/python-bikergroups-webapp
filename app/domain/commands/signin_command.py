@@ -6,4 +6,4 @@ from app.domain.commands.base_command import BaseCommand
 @dataclass
 class SignInCommand(BaseCommand):
     password: str
-    username: str
+    phone: str

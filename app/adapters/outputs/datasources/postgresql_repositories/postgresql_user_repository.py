@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session, selectinload
 
 from app.adapters.outputs.datasources.postgresql_entities.user_entity import UserEntity
 from app.domain.exceptions.not_found_exception import NotFoundException
-from app.domain.exceptions.username_already_exists_exception import UsernameAlreadyExistsException
+from app.domain.exceptions.phone_already_exists_exception import PhoneAlreadyExistsException
 from app.domain.models.user_model import UserModel
 from app.domain.ports.repositories.user_repository import UserRepository
 
@@ -29,8 +29,8 @@ class PostgreSQLUserRepository(UserRepository):
 
         return user_entity.to_model()
 
-    def get_by_username(self, username: str, with_permissions: bool = False) -> UserModel:
-        statement = select(UserEntity).where(UserEntity.username == username)
+    def get_by_phone(self, phone: str, with_permissions: bool = False) -> UserModel:
+        statement = select(UserEntity).where(UserEntity.phone == phone)
         if with_permissions:
             statement = statement.options(selectinload(UserEntity.permissions))
 
@@ -49,8 +49,8 @@ class PostgreSQLUserRepository(UserRepository):
             self._session.commit()
         except IntegrityError as ie:
             if isinstance(ie.orig, UniqueViolation):
-                if ie.orig.pgcode == "23505" and ie.orig.diag.constraint_name == "users_username_key":
-                    raise UsernameAlreadyExistsException() from ie
+                if ie.orig.pgcode == "23505" and ie.orig.diag.constraint_name == "users_phone_key":
+                    raise PhoneAlreadyExistsException() from ie
 
             raise
 

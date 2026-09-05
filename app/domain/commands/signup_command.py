@@ -7,4 +7,4 @@ from app.domain.commands.base_command import BaseCommand
 class SignUpCommand(BaseCommand):
     display_name: str
     password: str
-    username: str
+    phone: str

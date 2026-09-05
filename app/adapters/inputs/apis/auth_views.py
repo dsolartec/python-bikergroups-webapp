@@ -44,7 +44,7 @@ def signin():
 
     access_token, refresh_token = message_bus.handle(SignInCommand(
         password=payload.password,
-        username=payload.username,
+        phone=payload.phone,
     ))
 
     return TokensResponse(
@@ -63,7 +63,7 @@ def signup():
     access_token, refresh_token = message_bus.handle(SignUpCommand(
         display_name=payload.display_name,
         password=payload.password,
-        username=payload.username,
+        phone=payload.phone,
     ))
 
     return TokensResponse(

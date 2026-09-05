@@ -16,7 +16,7 @@ class UserEntity(BaseEntity):
     # Common columns
 
     id: Mapped[UUID] = mapped_column(primary_key=True, server_default=func.uuidv7())
-    username: Mapped[str] = mapped_column(String(20), unique=True)
+    phone: Mapped[str] = mapped_column(String(10), unique=True)
     password: Mapped[str]
 
     # Profile columns
@@ -53,7 +53,7 @@ class UserEntity(BaseEntity):
         return UserModel(
             # Common columns
             id=str(self.id),
-            username=self.username,
+            phone=self.phone,
             password=self.password,
 
             # Profile columns

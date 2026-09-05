@@ -12,5 +12,5 @@ class AccessTokenModel(BaseModel):
     expiration_timestamp: int = Field(alias="exp")
     generation_timestamp: int = Field(alias="iat")
     permissions_names: list[str] = Field(alias="permissions")
+    phone: str
     user_id: str = Field(alias="sub")
-    username: str

@@ -9,7 +9,7 @@ class UserRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def get_by_username(self, username: str, with_permissions: bool = False) -> UserModel:
+    def get_by_phone(self, phone: str, with_permissions: bool = False) -> UserModel:
         raise NotImplementedError
 
     @abstractmethod

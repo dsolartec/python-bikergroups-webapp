@@ -9,7 +9,7 @@ class UserModel(BaseModel):
     # Common properties
 
     id: str | None
-    username: str
+    phone: str
     password: str | None = Field(exclude=True)
 
     # Profile properties
@@ -23,4 +23,4 @@ class UserModel(BaseModel):
 
     # Relationships
 
-    permissions: list[PermissionModel]
+    permissions: list[PermissionModel] = Field(default=[])

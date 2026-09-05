@@ -28,8 +28,8 @@ class AuthUseCases:
 
             access_token = authenticator.generate_access_token(
                 permissions_names=[permission.name for permission in user.permissions],
+                phone=user.phone,
                 user_id=user.id,
-                username=user.username,
             )
 
             return access_token, cmd.refresh_token
@@ -44,7 +44,7 @@ class AuthUseCases:
 
         with container.unit_of_work() as uow:
             try:
-                user = uow.user_repository.get_by_username(cmd.username, with_permissions=True)
+                user = uow.user_repository.get_by_phone(cmd.phone, with_permissions=True)
             except NotFoundException as nfe:
                 raise WrongCredentialsException() from nfe
 
@@ -53,8 +53,8 @@ class AuthUseCases:
 
             access_token = authenticator.generate_access_token(
                 permissions_names=[permission.name for permission in user.permissions],
+                phone=user.phone,
                 user_id=user.id,
-                username=user.username,
             )
 
             refresh_token = authenticator.generate_refresh_token(user.id)
@@ -74,7 +74,7 @@ class AuthUseCases:
 
             user = uow.user_repository.save(UserModel(
                 id=None,
-                username=cmd.username,
+                phone=cmd.phone,
                 password=password_hash,
 
                 display_name=cmd.display_name,
@@ -83,7 +83,12 @@ class AuthUseCases:
                 updated_at=None,
             ))
 
-            access_token = authenticator.generate_access_token(user.id, user.username)
+            access_token = authenticator.generate_access_token(
+                permissions_names=[],
+                phone=user.phone,
+                user_id=user.id,
+            )
+
             refresh_token = authenticator.generate_refresh_token(user.id)
 
             return access_token, refresh_token

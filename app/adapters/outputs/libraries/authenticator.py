@@ -29,14 +29,14 @@ class Authenticator(AbstractAuthenticator):
             self,
             permissions_names: list[str],
             user_id: str,
-            username: str,
+            phone: str,
     ) -> str:
         return self._jwt.encode(AccessTokenModel(
             expiration_timestamp=get_int_from_datetime(datetime.now(timezone.utc) + timedelta(hours=8)),
             generation_timestamp=get_int_from_datetime(datetime.now(timezone.utc)),
             permissions_names=permissions_names,
+            phone=phone,
             user_id=user_id,
-            username=username,
         ).model_dump(), self._access_token_signing_key)
  
     def generate_refresh_token(self, user_id: str) -> str:
