@@ -19,7 +19,7 @@ message_bus = bootstrap()
 
 
 @auth_views.post("/refresh")
-@authenticator(permission_names=[], do_time_check=False)
+@authenticator(permissions=[], do_time_check=False)
 def refresh_token(logged_access_token: AccessTokenModel):
     payload = RefreshRequestBody.model_validate(request.get_json(silent=True) or {})
 

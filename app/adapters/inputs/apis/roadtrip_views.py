@@ -7,6 +7,7 @@ from app.adapters.outputs.requests.create_one_roadtrip_request_body import Creat
 from app.bootstrap import bootstrap
 from app.domain.commands.create_one_roadtrip_command import CreateOneRoadTripCommand
 from app.domain.commands.update_roadtrip_photo_command import UpdateRoadTripPhotoCommand
+from app.domain.enums.permission_enum import PermissionEnum
 from app.domain.models.access_token_model import AccessTokenModel
 from app.domain.models.roadtrip_model import RoadTripModel
 
@@ -16,7 +17,7 @@ message_bus = bootstrap()
 
 
 @roadtrip_views.post("/")
-@authenticator(permission_names=["create_roadtrip"])
+@authenticator(permissions=[PermissionEnum.CAN_CREATE_ROADTRIP])
 def create_roadtrip(logged_access_token: AccessTokenModel):
     payload = CreateOneRoadTripRequestBody.model_validate(request.get_json(silent=True) or {})
 
@@ -35,7 +36,7 @@ def create_roadtrip(logged_access_token: AccessTokenModel):
 
 
 @roadtrip_views.put("/<string:roadtrip_id>/photo")
-@authenticator(permission_names=["update_roadtrip"])
+@authenticator(permissions=[PermissionEnum.CAN_UPDATE_ROADTRIP])
 def update_roadtrip_photo(
         roadtrip_id: str,
         logged_access_token: AccessTokenModel,

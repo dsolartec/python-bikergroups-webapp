@@ -5,12 +5,13 @@ from flask import request
 from jwt.exceptions import JWTDecodeError
 
 from app.adapters.container import Container
+from app.domain.enums.permission_enum import PermissionEnum
 from app.domain.exceptions.not_found_exception import NotFoundException
 from app.domain.exceptions.unauthorized_exception import UnauthorizedException
 
 
 def authenticator(
-        permission_names: list[str],
+        permissions: list[PermissionEnum],
         do_time_check: bool = True,
 ) -> Callable[[Any], Any]:
     container = Container()
@@ -39,14 +40,14 @@ def authenticator(
             except JWTDecodeError as de:
                 raise UnauthorizedException(str(de)) from de
 
-            if len(permission_names) == 0:
+            if len(permissions) == 0:
                 return fn(*args, **kwargs)
 
-            for permission_name in set(permission_names):
-                if permission_name in access_token.permissions_names:
+            for permission_name in set(permissions):
+                if permission_name.value in access_token.permissions_names:
                     return fn(*args, **kwargs)
 
-            raise UnauthorizedException("User doesn't have permission")
+            raise UnauthorizedException("User cannot perform this action")
 
         return inner
 

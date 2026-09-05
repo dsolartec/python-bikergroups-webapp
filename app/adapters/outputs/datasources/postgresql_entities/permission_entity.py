@@ -4,6 +4,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.adapters.outputs.datasources.postgresql_entities.base_entity import BaseEntity
+from app.domain.enums.permission_enum import PermissionEnum
 from app.domain.models.permission_model import PermissionModel
 
 
@@ -17,11 +18,11 @@ class PermissionEntity(BaseEntity):
     def from_model(permission: PermissionModel) -> PermissionEntity:
         return PermissionEntity(
             id=UUID(permission.id),
-            name=permission.name,
+            name=permission.name.value,
         )
 
     def to_model(self) -> PermissionModel:
         return PermissionModel(
             id=str(self.id),
-            name=self.name,
+            name=PermissionEnum(self.name),
         )

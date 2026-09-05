@@ -29,7 +29,7 @@ class AuthUseCases:
                 raise UnauthorizedException("Invalid refresh token") from nfe
 
             access_token = authenticator.generate_access_token(
-                permissions_names=[permission.name for permission in user.permissions],
+                permissions_names=[permission.name.value for permission in user.permissions],
                 phone=user.phone,
                 user_id=user.id,
             )
@@ -54,7 +54,7 @@ class AuthUseCases:
                 raise WrongCredentialsException()
 
             access_token = authenticator.generate_access_token(
-                permissions_names=[permission.name for permission in user.permissions],
+                permissions_names=[permission.name.value for permission in user.permissions],
                 phone=user.phone,
                 user_id=user.id,
             )
