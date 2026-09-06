@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated
+from typing import Annotated, TypeVar
 
 from pydantic import PlainSerializer
 
@@ -11,3 +11,5 @@ FormattedDateTime = Annotated[
         return_type=str,
     ),
 ]
+
+T = TypeVar('T')

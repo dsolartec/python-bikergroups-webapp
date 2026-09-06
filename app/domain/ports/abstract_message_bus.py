@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Type
+from typing import Callable, Type
 
 from app.domain.commands.base_command import BaseCommand
 from app.domain.ports.abstract_container import AbstractContainer
@@ -10,10 +10,10 @@ class AbstractMessageBus(ABC):
     _command_handlers: dict[Type[BaseCommand], Callable]
 
     @abstractmethod
-    def _handle_command(self, command: BaseCommand) -> Any:
+    def _handle_command[T](self, command: BaseCommand[T]) -> T:
         raise NotImplementedError
 
-    def handle(self, message: BaseCommand) -> Any:
+    def handle[T](self, message: BaseCommand[T]) -> T:
         if isinstance(message, BaseCommand):
             return self._handle_command(message)
 

@@ -3,10 +3,11 @@ from datetime import datetime
 
 from app.domain.commands.base_command import BaseCommand
 from app.domain.models.coordinates_model import CoordinatesModel
+from app.domain.models.roadtrip_model import RoadTripModel
 
 
 @dataclass
-class CreateOneRoadTripCommand(BaseCommand):
+class CreateOneRoadTripCommand(BaseCommand[RoadTripModel]):
     display_name: str
 
     start_at: datetime

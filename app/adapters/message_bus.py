@@ -14,6 +14,6 @@ class MessageBus(AbstractMessageBus):
         self._container = container
         self._command_handlers = command_handlers
 
-    def _handle_command(self, command: BaseCommand) -> Any:
+    def _handle_command[T](self, command: BaseCommand[T]) -> T:
         handler = self._command_handlers[type(command)]
         return handler(command, self)

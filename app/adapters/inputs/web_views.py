@@ -12,8 +12,6 @@ from app.domain.commands.signup_command import SignUpCommand
 from app.domain.exceptions.not_found_exception import NotFoundException
 from app.domain.exceptions.phone_already_exists_exception import PhoneAlreadyExistsException
 from app.domain.exceptions.wrong_credentials_exception import WrongCredentialsException
-from app.domain.models.roadtrip_model import RoadTripModel
-from app.domain.models.user_model import UserModel
 
 
 web_views = Blueprint("web_views", __name__)
@@ -36,9 +34,6 @@ def load_logged_user_from_session():
 
 @web_views.get("/")
 def landing_page():
-    recent_roadtrips: list[RoadTripModel]
-    roadtrips_count: int
-
     recent_roadtrips, roadtrips_count, _ = message_bus.handle(GetAllRoadtripsPaginatedCommand(
         current_page=1,
         limit=5,
@@ -57,10 +52,6 @@ def landing_page():
 @web_views.get("/roadtrips")
 def roadtrips_page():
     current_page = request.args.get("page", default=1, type=int)
-
-    page_roadtrips: list[RoadTripModel]
-    total_roadtrips_count: int
-    max_pages: int
 
     page_roadtrips, total_roadtrips_count, max_pages = message_bus.handle(GetAllRoadtripsPaginatedCommand(
         current_page=current_page,
@@ -87,7 +78,7 @@ def signin_page():
         password = request.form["password"]
 
         try:
-            user: UserModel = message_bus.handle(SignInCommand(
+            user = message_bus.handle(SignInCommand(
                 password=password,
                 phone=phone
             ))
@@ -167,7 +158,7 @@ def signup_page():
 
         if not flashed_message:
             try:
-                user: UserModel = message_bus.handle(SignUpCommand(
+                user = message_bus.handle(SignUpCommand(
                     display_name=display_name,
                     password=password,
                     phone=phone

@@ -4,6 +4,6 @@ from app.domain.commands.base_command import BaseCommand
 
 
 @dataclass
-class UpdateRoadTripPhotoCommand(BaseCommand):
+class UpdateRoadTripPhotoCommand(BaseCommand[None]):
     actor_id: str
     roadtrip_id: str
