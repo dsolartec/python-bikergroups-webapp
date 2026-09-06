@@ -1,3 +1,12 @@
+document.querySelectorAll("[data-toggle-main-navigation]").forEach((btnEl) => {
+    btnEl.addEventListener('click', () => {
+        const mainNavigationEl = document.querySelector(".main-navigation__nav");
+        if (!mainNavigationEl) return;
+
+        mainNavigationEl.classList.toggle("show");
+    });
+});
+
 document.querySelectorAll("[data-toggle-password-input]").forEach((btnEl) => {
     btnEl.addEventListener('click', () => {
         const inputName = btnEl.getAttribute("data-input-name");

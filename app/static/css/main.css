@@ -558,6 +558,10 @@ h1, h2, h3, p {
     position: fixed;
     top: 0;
     width: 100%;
+    z-index: 1000;
+  }
+  .main-navigation__nav.show {
+    display: flex;
   }
 }
 .main-navigation__nav__bg {
@@ -611,6 +615,14 @@ h1, h2, h3, p {
   .main-navigation__nav__content__ul--top {
     align-items: start;
     flex: 1;
+  }
+}
+@media (width < 40rem) {
+  .main-navigation__nav__content__ul--bottom .main-navigation__nav__content__ul__li {
+    width: 100%;
+  }
+  .main-navigation__nav__content__ul--bottom .main-navigation__nav__content__ul__li .button {
+    justify-content: center;
   }
 }
 .main-navigation__nav__content__ul__li__a {

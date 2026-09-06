@@ -10,7 +10,7 @@
     <!-- Navigation -->
     <section class="main-navigation">
         <div class="main-navigation__logo">
-            <button class="main-navigation__logo__open-menu-button">
+            <button class="main-navigation__logo__open-menu-button" data-toggle-main-navigation>
                 <i class="icon icon--menu"></i>
             </button>
             <div class="main-navigation__logo__image"></div>
@@ -21,7 +21,7 @@
             <div class="main-navigation__nav__bg"></div>
             <div class="main-navigation__nav__content">
                 <div class="main-navigation__nav__content__header main-navigation__logo">
-                    <button class="main-navigation__logo__open-menu-button">
+                    <button class="main-navigation__logo__open-menu-button" data-toggle-main-navigation>
                         <i class="icon icon--close"></i>
                     </button>
                     <div class="main-navigation__logo__image"></div>
@@ -47,7 +47,7 @@
                     {% else %}
                     <li class="main-navigation__nav__content__ul__li">
                         <a class="main-navigation__nav__content__ul__li__a button button--primary" href="{{ url_for('web_views.signin_page') }}">
-                            <p class="button__text">Inicia sesión</p>
+                            <span class="button__text">Inicia sesión</span>
                         </a>
                     </li>
                     {% endif %}

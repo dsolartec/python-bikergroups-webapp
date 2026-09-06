@@ -58,12 +58,16 @@
 
         @media (width < base.$sm-width) {
             display: none;
-            // display: flex;
             height: 100vh;
             left: 0;
             position: fixed;
             top: 0;
             width: 100%;
+            z-index: 1000;
+
+            &.show {
+                display: flex;
+            }
         }
 
         &__bg {
@@ -97,6 +101,8 @@
                 }
             }
             &__ul {
+                $self: &;
+
                 align-items: center;
                 display: flex;
                 gap: 24px;
@@ -116,7 +122,17 @@
                         flex: 1;
                     }
                 }
-                &--bottom {}
+                &--bottom {
+                    @media (width < base.$sm-width) {
+                        #{ $self }__li {
+                            width: 100%;
+
+                            & .button {
+                                justify-content: center;
+                            }
+                        }
+                    }
+                }
                 &__li {
                     &__a {
                         font-size: 16px;
