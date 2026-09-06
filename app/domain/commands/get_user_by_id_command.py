@@ -4,5 +4,6 @@ from app.domain.commands.base_command import BaseCommand
 
 
 @dataclass
-class RefreshTokenCommand(BaseCommand):
-    refresh_token: str
+class GetUserByIDCommand(BaseCommand):
+    id: str
+    with_permissions: bool = False

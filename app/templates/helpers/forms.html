@@ -1,0 +1,13 @@
+{% macro input(name, icon, placeholder="", type="text") -%}
+<div class="input">
+    <div class="input__icon input__icon--left">
+        <i class="icon icon--{{ icon }}"></i>
+    </div>
+    <input class="input__input" name="{{ name }}" placeholder="{{ placeholder }}" type="{{ type }}">
+    {% if type == "password" %}
+    <div class="input__icon input__icon--right">
+        <i class="icon icon--eye"></i>
+    </div>
+    {% endif %}
+</div>
+{%- endmacro %}

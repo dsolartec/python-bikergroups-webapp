@@ -13,6 +13,13 @@ html, body {
   top: 0;
 }
 
+body {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  min-height: 100vh;
+}
+
 a {
   color: inherit;
 }
@@ -30,6 +37,7 @@ h1, h2, h3, p {
 .button {
   align-items: center;
   border-radius: 6px;
+  color: inherit;
   display: flex;
   gap: 4px;
   padding: 6px 12px;
@@ -41,6 +49,10 @@ h1, h2, h3, p {
 .button--secondary {
   background-color: #464B45;
 }
+.button__text {
+  color: inherit;
+}
+
 .footer {
   padding: 12px 24px;
   width: 100%;
@@ -67,9 +79,25 @@ h1, h2, h3, p {
   -webkit-mask-image: url("/static/icons/close.svg");
   mask-image: url("/static/icons/close.svg");
 }
+.icon--eye {
+  -webkit-mask-image: url("/static/icons/eye.svg");
+  mask-image: url("/static/icons/eye.svg");
+}
+.icon--eye-off {
+  -webkit-mask-image: url("/static/icons/eye-off.svg");
+  mask-image: url("/static/icons/eye-off.svg");
+}
 .icon--instagram {
   -webkit-mask-image: url("/static/icons/brand-instagram.svg");
   mask-image: url("/static/icons/brand-instagram.svg");
+}
+.icon--lock {
+  -webkit-mask-image: url("/static/icons/lock.svg");
+  mask-image: url("/static/icons/lock.svg");
+}
+.icon--login-2 {
+  -webkit-mask-image: url("/static/icons/login-2.svg");
+  mask-image: url("/static/icons/login-2.svg");
 }
 .icon--map-pin-share {
   -webkit-mask-image: url("/static/icons/map-pin-share.svg");
@@ -79,9 +107,46 @@ h1, h2, h3, p {
   -webkit-mask-image: url("/static/icons/menu.svg");
   mask-image: url("/static/icons/menu.svg");
 }
+.icon--phone {
+  -webkit-mask-image: url("/static/icons/phone.svg");
+  mask-image: url("/static/icons/phone.svg");
+}
 .icon--whatsapp {
   -webkit-mask-image: url("/static/icons/brand-whatsapp.svg");
   mask-image: url("/static/icons/brand-whatsapp.svg");
+}
+
+.input {
+  align-items: center;
+  display: flex;
+}
+.input__icon--left, .input__icon--right {
+  align-items: center;
+  display: flex;
+  height: 32px;
+  justify-content: center;
+  width: 32px;
+}
+.input__icon--left {
+  background-color: #464B45;
+  border-radius: 6px 0 0 6px;
+}
+.input__icon--right {
+  background-color: #171717;
+  border-radius: 0 6px 6px 0;
+}
+.input__input {
+  background-color: #171717;
+  border: none;
+  border-radius: 0 6px 6px 0;
+  color: inherit;
+  height: 32px;
+  flex: 1;
+  outline: none;
+  padding: 0 12px;
+}
+.input__input:has(+ .input__icon--right) {
+  border-radius: 0;
 }
 
 .landing-page__about {
@@ -536,6 +601,32 @@ h1, h2, h3, p {
 .main-navigation__nav__content__ul__li__a {
   font-size: 16px;
   text-decoration: none;
+}
+
+.signin-page {
+  display: flex;
+  flex: 1;
+  padding: 12px 36px;
+}
+.signin-page__left {
+  min-width: 300px;
+}
+.signin-page__left__form {
+  align-items: end;
+  display: flex;
+  flex-flow: column;
+  gap: 12px;
+  margin-top: 36px;
+}
+.signin-page__left__form__flash-message {
+  background-color: #B71C1C;
+  border-radius: 6px;
+  font-size: 14px;
+  padding: 6px 12px;
+}
+.signin-page__left__form > .input {
+  min-width: 300px;
+  width: 100%;
 }
 
 .text--title {

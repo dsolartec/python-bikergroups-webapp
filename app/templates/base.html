@@ -40,11 +40,17 @@
                     </li>
                 </ul>
                 <ul class="main-navigation__nav__content__ul main-navigation__nav__content__ul--bottom">
+                    {% if g.user %}
+                    <li>
+                        {{ g.user.display_name }}
+                    </li>
+                    {% else %}
                     <li class="main-navigation__nav__content__ul__li">
-                        <a class="main-navigation__nav__content__ul__li__a button button--primary" href="/">
+                        <a class="main-navigation__nav__content__ul__li__a button button--primary" href="{{ url_for('web_views.signin_page') }}">
                             <p class="button__text">Inicia sesión</p>
                         </a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>

@@ -13,9 +13,26 @@
         -webkit-mask-image: url("/static/icons/close.svg");
         mask-image: url("/static/icons/close.svg");
     }
+    &--eye {
+        -webkit-mask-image: url("/static/icons/eye.svg");
+        mask-image: url("/static/icons/eye.svg");
+
+        &-off {
+            -webkit-mask-image: url("/static/icons/eye-off.svg");
+            mask-image: url("/static/icons/eye-off.svg");
+        }
+    }
     &--instagram {
         -webkit-mask-image: url("/static/icons/brand-instagram.svg");
         mask-image: url("/static/icons/brand-instagram.svg");
+    }
+    &--lock {
+        -webkit-mask-image: url("/static/icons/lock.svg");
+        mask-image: url("/static/icons/lock.svg");
+    }
+    &--login-2 {
+        -webkit-mask-image: url("/static/icons/login-2.svg");
+        mask-image: url("/static/icons/login-2.svg");
     }
     &--map-pin-share {
         -webkit-mask-image: url("/static/icons/map-pin-share.svg");
@@ -24,6 +41,10 @@
     &--menu {
         -webkit-mask-image: url("/static/icons/menu.svg");
         mask-image: url("/static/icons/menu.svg");
+    }
+    &--phone {
+        -webkit-mask-image: url("/static/icons/phone.svg");
+        mask-image: url("/static/icons/phone.svg");
     }
     &--whatsapp {
         -webkit-mask-image: url("/static/icons/brand-whatsapp.svg");

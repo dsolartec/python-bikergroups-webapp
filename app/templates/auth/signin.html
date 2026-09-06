@@ -1,0 +1,23 @@
+{% import "helpers/forms.html" as forms_helpers %}
+{% extends "base.html" %}
+
+{% block content %}
+<section class="signin-page">
+    <div class="signin-page__left">
+        <h1 class="text text--title">{% block title %}Inicio de sesión{% endblock %}</h1>
+        <form class="signin-page__left__form" method="post">
+            {% for message in get_flashed_messages(category_filter=["signin.error"]) %}
+            <span class="signin-page__left__form__flash-message">
+                {{ message }}
+            </span>
+            {% endfor %}
+            {{ forms_helpers.input(name="phone", icon="phone", placeholder="Número de teléfono", type="number") }}
+            {{ forms_helpers.input(name="password", icon="lock", placeholder="Contraseña", type="password") }}
+            <button class="button button--primary" type="submit">
+                <span class="button__text">Ingresar</span>
+                <i class="button__icon icon icon--login-2"></i>
+            </button>
+        </form>
+    </div>
+</section>
+{% endblock %}
