@@ -1,0 +1,48 @@
+$background-color: #0C0A09;
+$on-background-text-color: white;
+
+$secondary-background-color: #171717;
+
+$primary-color: #774D01;
+$secondary-color: #464B45;
+$tertiary-color: #EBC922;
+
+$sm-width: 40rem;
+$md-width: 48rem;
+$lg-width: 64rem;
+$xl-width: 80rem;
+$xxl-width: 96rem;
+
+// Fonts
+
+@import url('https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+// Normalize
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    background-color: $background-color;
+    color: $on-background-text-color;
+    font-family: "Roboto", sans-serif;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    top: 0;
+}
+
+a {
+    color: inherit;
+}
+
+button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+h1, h2, h3, p {
+    margin: 0;
+}

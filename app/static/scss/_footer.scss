@@ -1,0 +1,11 @@
+@use 'base';
+
+.footer {
+    padding: 12px 24px;
+    width: 100%;
+
+    @media (width < base.$sm-width) {
+        font-size: 12px;
+        text-align: center;
+    }
+}

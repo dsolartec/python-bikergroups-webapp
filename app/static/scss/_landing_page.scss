@@ -1,0 +1,343 @@
+@use 'base';
+@use 'sass:math';
+
+.landing-page {
+    &__about {
+        display: flex;
+        gap: 36px;
+        padding: 0 24px 48px 24px;
+        width: 100%;
+
+        @media (width < base.$sm-width) {
+            flex-flow: column;
+            gap: 24px;
+        }
+
+        &__image {
+            background: {
+                image: url("/static/images/landing_page_himalayan450.jpeg");
+                position: 0 (math.div(180px, 200px) * 100%);
+                repeat: no-repeat;
+                size: 100%;
+            };
+            border-radius: 24px;
+            height: 0;
+            padding-top: math.div(200px, 390px) * 100%;
+            width: 100%;
+
+            @media (width >= base.$md-width) {
+                background-position: 0 (math.div(300px, 450px) * 100%);
+                height: 0;
+                padding-top: math.div(280px, 450px) * 100%;
+                width: 350px;
+            }
+
+            @media (width >= base.$lg-width) {
+                background-position: 0 -10px;
+                height: 650px;
+                padding-top: 0;
+                width: 450px;
+            }
+        }
+        &__content {
+            display: flex;
+            flex: 1;
+            flex-flow: column;
+
+            @media (width >= base.$lg-width) {
+                height: 650px;
+                justify-content: space-between;
+            }
+
+            &__text {
+                max-width: 600px;
+
+                & > .text--title {
+                    @media (width >= base.$sm-width) {
+                        margin-top: 24px;
+                    }
+                }
+                & > p {
+                    font-size: 14px;
+                    line-height: 1.5em;
+
+                    @media (width >= base.$sm-width) {
+                        font-size: 20px;
+                    }
+
+                    &:first-of-type {
+                        margin-top: 24px;
+
+                        @media (width >= base.$sm-width) {
+                            margin-top: 36px;
+                        }
+                    }
+                    &:nth-of-type(2) {
+                        font: {
+                            family: "Righteous", sans-serif;
+                            weight: 400;
+                        };
+                        margin-top: 1em;
+                    }
+                }
+            }
+            &__info {
+                display: flex;
+                flex-flow: column;
+                gap: 36px;
+                margin-top: 60px;
+                width: 100%;
+
+                @media (width >= base.$md-width) {
+                    gap: 12px;
+                    margin-top: 36px;
+                }
+
+                @media (width >= base.$lg-width) {
+                    align-items: end;
+                    flex-flow: row-reverse;
+                    gap: 0;
+                    justify-content: space-between;
+                    margin-top: 0;
+                }
+
+                &__stats, &__social-networks {
+                    display: flex;
+                    gap: 8px;
+
+                    @media (width >= base.$lg-width) {
+                        flex-flow: column-reverse;
+                    }
+                }
+                &__stats {
+                    align-items: end;
+                    gap: 8px;
+
+                    @media (width >= base.$lg-width) {
+                        gap: 12px;
+                    }
+
+                    & > .button .button__text {
+                        font-size: 12px;
+
+                        @media (width >= base.$lg-width) {
+                            font-size: 20px;
+                        }
+
+                        & > span {
+                            font: {
+                                family: "Righteous", sans-serif;
+                                size: 16px;
+                                weight: 400;
+                            };
+
+                            @media (width >= base.$lg-width) {
+                                font-size: 32px;
+                            }
+                        }
+                    }
+                }
+                &__social-networks {
+                    gap: 12px;
+
+                    & > a {
+                        align-items: center;
+                        display: flex;
+                        gap: 4px;
+                        text-decoration: none;
+
+                        @media (width >= base.$lg-width) {
+                            gap: 8px;
+                        }
+
+                        & > .icon {
+                            height: 24px;
+                            width: 24px;
+
+                            @media (width >= base.$lg-width) {
+                                height: 36px;
+                                width: 36px;
+                            }
+                        }
+                        & > span {
+                            font-size: 12px;
+
+                            @media (width >= base.$lg-width) {
+                                font-size: 14px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &__roadtrips {
+        background-color: base.$secondary-background-color;
+        padding: 24px;
+
+        @media (width >= base.$lg-width) {
+            padding: 24px 0;
+        }
+
+        & > .text--title {
+            @media (width >= base.$lg-width) {
+                margin-left: 72px;
+            }
+        }
+        &__content {
+            display: flex;
+            flex-flow: column;
+            margin-top: 24px;
+            position: relative;
+
+            @media (width < base.$sm-width) or (width >= base.$lg-width) {
+                height: auto !important;
+            }
+
+            @media (width >= base.$sm-width) {
+                flex-flow: row;
+            }
+
+            @media (width >= base.$lg-width) {
+                align-items: center;
+                flex-flow: row;
+                margin: 24px 0;
+            }
+
+            &__first {
+                @media (width >= base.$lg-width) {
+                    display: flex;
+                    margin: calc(100% / 12) 0;
+                    position: relative;
+                    width: 500px;
+    
+                    &::before {
+                        background-color: #262626;
+                        border-radius: 50%;
+                        content: "";
+                        display: block;
+                        height: 720px;
+                        left: -500px;
+                        position: absolute;
+                        top: calc(100% / 8 * -1);
+                        width: 1000px;
+                        z-index: 0;
+                    }
+                    & > div {
+                        margin-left: 48px;
+                        position: relative;
+                        z-index: 1;
+                    }
+                }
+            }
+            &__rest {
+                display: flex;
+                flex-flow: column;
+                gap: 24px;
+                margin-top: 24px;
+
+                @media (width >= base.$sm-width) and (width < base.$lg-width) {
+                    flex-flow: row;
+                    flex-wrap: wrap;
+                    left: 0;
+                    margin-top: 0;
+                    position: absolute;
+
+                    & > div:first-of-type {
+                        margin-left: 344px;
+                    }
+                }
+
+                @media (width >= base.$lg-width) {
+                    align-items: center;
+                    flex: 1;
+                    flex-flow: row;
+                    flex-wrap: wrap;
+                    gap: 96px;
+                    justify-content: center;
+                    margin-top: 0;
+                    padding: 0 48px;
+                }
+            }
+            &__roadtrip {
+                display: grid;
+                gap: 16px;
+                grid-template-areas: "image info" "image actions";
+                grid-template-columns: 120px auto;
+
+                @media (width >= base.$sm-width) {
+                    grid-template-areas: "info" "image" "actions";
+                    grid-template-columns: 1fr;
+                }
+
+                @media (width >= base.$lg-width) {
+                    grid-template-areas: "info" "image" "actions";
+                    grid-template-columns: 1fr;
+                }
+
+                &__image {
+                    background: {
+                        position: center;
+                        repeat: no-repeat;
+                        size: 100%;
+                    };
+                    border-radius: 6px;
+                    grid-area: image;
+                    height: 120px;
+                    width: 120px;
+
+                    @media (width >= base.$sm-width) {
+                        height: 520px;
+                        width: 320px;
+                    }
+                }
+                &__info {
+                    display: flex;
+                    flex-flow: column;
+                    gap: 4px;
+                    grid-area: info;
+
+                    & > h3 {
+                        font: {
+                            size: 16px;
+                            weight: medium;
+                        };
+
+                        @media (width >= base.$lg-width) {
+                            font-size: 24px;
+                            text-align: center;
+                        }
+                    }
+                    & > p {
+                        font-size: 14px;
+
+                        @media (width >= base.$sm-width) {
+                            display: none;
+                        }
+                    }
+                }
+                &__actions {
+                    display: flex;
+                    justify-content: start;
+                    grid-area: actions;
+
+                    @media (width < base.$sm-width) {
+                        & > a {
+                            font-size: 12px;
+                            padding: 2px 4px;
+    
+                            & .icon {
+                                height: 16px;
+                                width: 16px;
+                            }
+                        }
+                    }
+
+                    @media (width >= base.$lg-width) {
+                        justify-content: center;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<section class="landing-page__about">
+    <div class="landing-page__about__image"></div>
+    <section class="landing-page__about__content">
+        <div class="landing-page__about__content__text">
+            <h2 class="text text--title">¿Quiénes somos?</h2>
+            <p>
+                <b>HIMALEGENDS</b> es un grupo de moteros de la <b>Royal Enfield Himalayan</b>,
+                ubicados principalmente en Antioquia, salimos a disfrutar de la moto en diferentes
+                rutas: Trocha, pueblitos o charcos.
+            </p>
+            <p>
+                "Unidos por la ruta y el motor.<br />
+                Amistad, libertad y aventura sin límites.<br />
+                Aquí nacen las leyendas."
+            </p>
+        </div>
+        <div class="landing-page__about__content__info">
+            <div class="landing-page__about__content__info__stats">
+                <div class="button button--secondary">
+                    <p class="button__text"><span>+500</span> Integrantes</p>
+                </div>
+                <div class="button button--primary">
+                    <p class="button__text"><span>{{roadtrips_count}}</span> Rodada{% if roadtrips_count != 1 %}s{% endif %}</p>
+                </div>
+            </div>
+            <div class="landing-page__about__content__info__social-networks">
+                <a href="https://www.instagram.com/himalegends" target="_blank">
+                    <i class="icon icon--instagram"></i>
+                    <span>@himalegends</span>
+                </a>
+                <a href="/" target="_blank">
+                    <i class="icon icon--whatsapp"></i>
+                    <span>Únete a nuestro grupo</span>
+                </a>
+            </div>
+        </div>
+    </section>
+</section>
+
+<section class="landing-page__roadtrips">
+    <h2 class="text text--title">Rodadas</h2>
+    {% if recent_roadtrips %}
+    {% set roadtrips_rest_height = 607 * (recent_roadtrips.rest|length // 2 + 1) + (24 * recent_roadtrips.rest|length // 2) %}
+    <div class="landing-page__roadtrips__content" style="height: {{ roadtrips_rest_height }}px;">
+        <div class="landing-page__roadtrips__content__first">
+            <div class="landing-page__roadtrips__content__roadtrip">
+                <div 
+                    class="landing-page__roadtrips__content__roadtrip__image"
+                    style="background-image: url('/static/images/roadtrips/{{ recent_roadtrips.first.id }}.jpeg')"
+                ></div>
+                <div class="landing-page__roadtrips__content__roadtrip__info">
+                    <h3>{{ recent_roadtrips.first.start_at.strftime('%d de %B') }}</h3>
+                    <p><b>Destino:</b> {{ recent_roadtrips.first.end_coordinates.name }}</p>
+                    <p><b>Hora de salida:</b> {{ recent_roadtrips.first.start_at.strftime('%H:%M') }}</p>
+                    <p><b>Punto de salida:</b> {{ recent_roadtrips.first.start_coordinates.name }}</p>
+                </div>
+                <div class="landing-page__roadtrips__content__roadtrip__actions">
+                    <a
+                        class="button button--primary"
+                        href="https://www.google.com/maps/search/{{ recent_roadtrips.first.start_coordinates.latitude }},+{{ recent_roadtrips.first.start_coordinates.longitude }}"
+                        target="_blank"
+                    >
+                        <i class="button__icon button__icon--left icon icon--map-pin-share"></i>
+                        <span class="button__text">Ver en maps</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="landing-page__roadtrips__content__rest">
+            {% for roadtrip in recent_roadtrips.rest %}
+            <div class="landing-page__roadtrips__content__roadtrip">
+                <div 
+                    class="landing-page__roadtrips__content__roadtrip__image"
+                    style="background-image: url('/static/images/roadtrips/{{ roadtrip.id }}.jpeg')"
+                ></div>
+                <div class="landing-page__roadtrips__content__roadtrip__info">
+                    <h3>{{ roadtrip.start_at.strftime('%d de %B') }}</h3>
+                    <p><b>Destino:</b> {{ roadtrip.end_coordinates.name }}</p>
+                    <p><b>Hora de salida:</b> {{ roadtrip.start_at.strftime('%H:%M') }}</p>
+                    <p><b>Punto de salida:</b> {{ roadtrip.start_coordinates.name }}</p>
+                </div>
+                <div class="landing-page__roadtrips__content__roadtrip__actions">
+                    <a
+                        class="button button--primary"
+                        href="https://www.google.com/maps/search/{{ roadtrip.start_coordinates.latitude }},+{{ roadtrip.start_coordinates.longitude }}"
+                        target="_blank"
+                    >
+                        <i class="button__icon button__icon--left icon icon--map-pin-share"></i>
+                        <span class="button__text">Ver en maps</span>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

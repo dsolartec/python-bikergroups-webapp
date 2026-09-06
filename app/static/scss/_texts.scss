@@ -1,0 +1,19 @@
+@use 'base';
+
+.text {
+    &--title {
+        align-items: center;
+        display: flex;
+        font-size: 32px;
+        gap: 12px;
+
+        &::before {
+            background-color: base.$tertiary-color;
+            border-radius: 2px;
+            content: "";
+            display: block;
+            height: 1.25em;
+            width: 4px;
+        }
+    }
+}

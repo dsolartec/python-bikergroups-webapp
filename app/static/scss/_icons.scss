@@ -1,0 +1,32 @@
+.icon {
+    color: white;
+    background-color: currentColor;
+    display: block;
+    height: 24px;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    width: 24px;
+
+    &--close {
+        -webkit-mask-image: url("/static/icons/close.svg");
+        mask-image: url("/static/icons/close.svg");
+    }
+    &--instagram {
+        -webkit-mask-image: url("/static/icons/brand-instagram.svg");
+        mask-image: url("/static/icons/brand-instagram.svg");
+    }
+    &--map-pin-share {
+        -webkit-mask-image: url("/static/icons/map-pin-share.svg");
+        mask-image: url("/static/icons/map-pin-share.svg");
+    }
+    &--menu {
+        -webkit-mask-image: url("/static/icons/menu.svg");
+        mask-image: url("/static/icons/menu.svg");
+    }
+    &--whatsapp {
+        -webkit-mask-image: url("/static/icons/brand-whatsapp.svg");
+        mask-image: url("/static/icons/brand-whatsapp.svg");
+    }
+}

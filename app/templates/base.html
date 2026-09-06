@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIMALEGENDS | {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <section class="main-navigation">
+        <div class="main-navigation__logo">
+            <button class="main-navigation__logo__open-menu-button">
+                <i class="icon icon--menu"></i>
+            </button>
+            <div class="main-navigation__logo__image"></div>
+            <p class="main-navigation__logo__text">HIMALEGENDS</p>
+        </div>
+
+        <nav class="main-navigation__nav">
+            <div class="main-navigation__nav__bg"></div>
+            <div class="main-navigation__nav__content">
+                <div class="main-navigation__nav__content__header main-navigation__logo">
+                    <button class="main-navigation__logo__open-menu-button">
+                        <i class="icon icon--close"></i>
+                    </button>
+                    <div class="main-navigation__logo__image"></div>
+                    <p class="main-navigation__logo__text">HIMALEGENDS</p>
+                </div>
+                <ul class="main-navigation__nav__content__ul main-navigation__nav__content__ul--top">
+                    <li class="main-navigation__nav__content__ul__li">
+                        <a class="main-navigation__nav__content__ul__li__a" href="{{ url_for('web_views.landing_page') }}">
+                            Inicio
+                        </a>
+                    </li>
+                    <li class="main-navigation__nav__content__ul__li">
+                        <a class="main-navigation__nav__content__ul__li__a" href="/">
+                            Rodadas
+                        </a>
+                    </li>
+                </ul>
+                <ul class="main-navigation__nav__content__ul main-navigation__nav__content__ul--bottom">
+                    <li class="main-navigation__nav__content__ul__li">
+                        <a class="main-navigation__nav__content__ul__li__a button button--primary" href="/">
+                            <p class="button__text">Inicia sesión</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </section>
+
+    {% block content %}{% endblock %}
+
+    <footer class="footer">
+        <p>HIMALEGENDS 2026 © Todos los derechos reservados</p>
+    </footer>
+</body>
+</html>

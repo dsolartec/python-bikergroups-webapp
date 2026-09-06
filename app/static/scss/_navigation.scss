@@ -1,0 +1,129 @@
+@use 'base';
+@use 'sass:math';
+
+.main-navigation {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 24px 36px;
+    width: 100%;
+
+    @media (width < base.$sm-width) {
+        padding: 24px;
+    }
+
+    &__logo {
+        align-items: center;
+        display: flex;
+        gap: 16px;
+
+        &__open-menu-button {
+            margin-right: 8px;
+
+            @media (width >= base.$sm-width) {
+                display: none;
+            }
+        }
+        &__image {
+            $size: 60px;
+
+            @media (width < base.$sm-width) {
+                $size: 45px;
+            }
+
+            background: {
+                image: url('/static/images/icon.jpeg');
+                position: center;
+                size: $size;
+            };
+            border-radius: math.div($size, 2);
+            width: $size;
+            height: $size;
+        }
+        &__text {
+            font: {
+                size: 20px;
+                weight: bold;
+            };
+
+            @media (width >= base.$sm-width) {
+                font-size: 24px;
+            }
+        }
+    }
+    &__nav {
+        display: flex;
+        gap: 24px;
+        position: relative;
+
+        @media (width < base.$sm-width) {
+            display: none;
+            // display: flex;
+            height: 100vh;
+            left: 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+        }
+
+        &__bg {
+            background-color: base.$secondary-background-color;
+            height: 100%;
+            opacity: 75%;
+            width: 100%;
+
+            @media (width >= base.$sm-width) {
+                display: none;
+            }
+        }
+        &__content {
+            display: flex;
+            gap: 24px;
+
+            @media (width < base.$sm-width) {
+                background-color: base.$background-color;
+                box-shadow: 2px 0px 8px 0px base.$background-color;
+                flex-flow: column;
+                height: 100%;
+                justify-content: space-between;
+                padding: 24px;
+                position: absolute;
+                width: 80%;
+            }
+
+            &__header {
+                @media (width >= base.$sm-width) {
+                    display: none;
+                }
+            }
+            &__ul {
+                align-items: center;
+                display: flex;
+                gap: 24px;
+                list-style: none;
+                margin: 0;
+                padding: 0;
+
+                @media (width < base.$sm-width) {
+                    align-items: start;
+                    flex-flow: column;
+                    width: 100%;
+                }
+
+                &--top {
+                    @media (width < base.$sm-width) {
+                        align-items: start;
+                        flex: 1;
+                    }
+                }
+                &--bottom {}
+                &__li {
+                    &__a {
+                        font-size: 16px;
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+    }
+}
