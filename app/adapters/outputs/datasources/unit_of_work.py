@@ -4,10 +4,12 @@ from sqlalchemy import Engine, QueuePool, create_engine
 from sqlalchemy.orm import Session, scoped_session, sessionmaker
 
 from app.adapters.outputs.datasources.postgresql_entities.base_entity import BaseEntity
+from app.adapters.outputs.datasources.postgresql_entities.permission_entity import PermissionEntity
 from app.adapters.outputs.datasources.postgresql_repositories.postgresql_audit_log_repository import PostgreSQLAuditLogRepository
 from app.adapters.outputs.datasources.postgresql_repositories.postgresql_roadtrip_repository import PostgreSQLRoadTripRepository
 from app.adapters.outputs.datasources.postgresql_repositories.postgresql_user_permission_repository import PostgreSQLUserPermissionRepository
 from app.adapters.outputs.datasources.postgresql_repositories.postgresql_user_repository import PostgreSQLUserRepository
+from app.domain.enums.permission_enum import PermissionEnum
 from app.domain.ports.abstract_unit_of_work import AbstractUnitOfWork
 
 
@@ -15,9 +17,9 @@ class UnitOfWork(AbstractUnitOfWork):
     _postgresql_engine: Engine
     _postgresql_session: Session
 
-    def __init__(self):
+    def __init__(self, postgresql_connection_uri: str):
         self._postgresql_engine = create_engine(
-            "postgresql+psycopg2://dsolartec@localhost:5432/bikergroups",
+            f"postgresql+psycopg2://{postgresql_connection_uri}",
             max_overflow=20,
             pool_pre_ping=True,
             pool_recycle=3600,
@@ -25,8 +27,6 @@ class UnitOfWork(AbstractUnitOfWork):
             pool_timeout=20,
             poolclass=QueuePool,
         )
-
-        BaseEntity.metadata.create_all(self._postgresql_engine)
 
         self._postgresql_session = scoped_session(sessionmaker(self._postgresql_engine))
 
@@ -40,14 +40,14 @@ class UnitOfWork(AbstractUnitOfWork):
 
         return super().__enter__()
 
-    def commit(self) -> None:
+    def generate_initial_data(self) -> None:
+        BaseEntity.metadata.create_all(self._postgresql_engine)
+
+        self._postgresql_session.add_all([
+            PermissionEntity(name=permission_name.value)
+                for permission_name in list(PermissionEnum)
+        ])
         self._postgresql_session.commit()
-
-    def expose_data(self) -> None:
-        self._postgresql_session.expunge_all()
-
-    def refresh(self, instance: object, attribute_names: Iterable[str] | None = None) -> None:
-        self._postgresql_session.refresh(instance, attribute_names)
 
     def rollback(self) -> None:
         self._postgresql_session.rollback()

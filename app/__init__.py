@@ -1,9 +1,10 @@
 from http import HTTPStatus
-from logging import basicConfig, getLogger
+from logging import getLogger
 
 from flask import Flask, jsonify
 from pydantic import ValidationError
 
+from app.adapters.container import Container
 from app.adapters.inputs.web_views import web_views
 from app.domain.exceptions.base_http_exception import BaseHTTPException
 
@@ -35,16 +36,19 @@ def error_middleware(e: Exception):
 
 
 def create_app():
-    basicConfig(format="[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s")
+    container = Container()
 
-    app = Flask(__name__)
+    config = container.config()
+    config.apply_to_logging()
 
-    app.config["SECRET_KEY"] = "dev"
-    app.config["MAX_CONTENT_LENGTH"] = 16 * 1000 * 1000 # Max 16mb per file
+    if config.generate_initial_databases_data:
+        with container.unit_of_work() as uow:
+            uow.generate_initial_data()
+
+    app = config.apply_to_flask_app(Flask(__name__))    
     app.url_map.strict_slashes = False
 
-    app.register_blueprint(web_views)
-
     app.register_error_handler(Exception, error_middleware)
+    app.register_blueprint(web_views)
 
     return app

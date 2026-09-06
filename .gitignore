@@ -2,6 +2,9 @@
 app/static/images/roadtrips/*.jpeg
 app/static/css/
 
+# Development
+local_settings.py
+
 # Logging
 *.log
 
