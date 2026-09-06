@@ -57,6 +57,9 @@ def landing_page():
 @web_views.route("/login", methods=[HTTPMethod.GET, HTTPMethod.POST])
 @require_unlogged()
 def signin_page():
+    phone: str = ""
+    password: str = ""
+
     if request.method == HTTPMethod.POST:
         phone = request.form["phone"]
         password = request.form["password"]
@@ -74,7 +77,14 @@ def signin_page():
         except WrongCredentialsException:
             flash("El número de teléfono o la contraseña no son válidos", "signin.error")
 
-    return render_template("auth/signin.html")
+    return render_template(
+        "auth.html",
+        signin_form_data={
+            "phone": phone,
+            "password": password,
+        },
+        signup_form_data={},
+    )
 
 
 @web_views.route("/register", methods=[HTTPMethod.GET, HTTPMethod.POST])
@@ -149,8 +159,9 @@ def signup_page():
                 flash("El número de teléfono ya está en uso", "signup.phone.error")
 
     return render_template(
-        "auth/signup.html",
-        form_data={
+        "auth.html",
+        signin_form_data={},
+        signup_form_data={
             "confirm_password": confirm_password,
             "display_name": display_name,
             "password": password,

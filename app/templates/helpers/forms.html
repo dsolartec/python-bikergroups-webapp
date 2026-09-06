@@ -1,5 +1,5 @@
 {% macro input(form_name, name, icon, value="", placeholder="", type="text") -%}
-<div class="input">
+<div class="input" id="{{ form_name }}-{{ name }}">
     <div class="input__container">
         <div class="input__container__icon input__container__icon--left">
             <i class="icon icon--{{ icon }}"></i>
@@ -15,7 +15,7 @@
         <div
             class="input__container__icon input__container__icon--right"
             data-toggle-password-input
-            data-input-name="{{ name }}"
+            data-input-name="{{ form_name }}-{{ name }}"
         >
             <i class="icon icon--eye"></i>
         </div>

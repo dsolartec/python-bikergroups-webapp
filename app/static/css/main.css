@@ -28,10 +28,109 @@ button {
   background-color: transparent;
   border: none;
   cursor: pointer;
+  padding: 0;
 }
 
 h1, h2, h3, p {
   margin: 0;
+}
+
+.auth-page {
+  display: flex;
+  flex: 1;
+  gap: 96px;
+  justify-content: center;
+  padding: 12px 24px;
+}
+@media (width >= 64rem) {
+  .auth-page {
+    padding: 12px 36px;
+  }
+}
+.auth-page__left, .auth-page__right {
+  display: none;
+  flex: 1;
+}
+@media (width >= 64rem) {
+  .auth-page__left, .auth-page__right {
+    display: block;
+    flex: 0.25;
+    min-width: 350px;
+  }
+}
+.auth-page__left.show-mobile, .auth-page__right.show-mobile {
+  display: block;
+}
+.auth-page__left__form, .auth-page__right__form {
+  align-items: end;
+  display: flex;
+  flex-flow: column;
+  gap: 12px;
+  margin-top: 36px;
+}
+.auth-page__left__form > .input, .auth-page__right__form > .input {
+  width: 100%;
+}
+.auth-page__left__go-to-signup, .auth-page__left__go-to-signin, .auth-page__right__go-to-signup, .auth-page__right__go-to-signin {
+  border-top: 1px solid white;
+  margin-top: 48px;
+  padding-top: 24px;
+  text-align: center;
+}
+@media (width >= 64rem) {
+  .auth-page__left__go-to-signup, .auth-page__left__go-to-signin, .auth-page__right__go-to-signup, .auth-page__right__go-to-signin {
+    display: none;
+  }
+}
+.auth-page__divider {
+  display: none;
+}
+@media (width >= 64rem) {
+  .auth-page__divider {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 1px;
+    display: block;
+    width: 2px;
+  }
+}
+.auth-page__right__form__password-details {
+  list-style: none;
+  margin: 0;
+  padding: 0 12px;
+  width: 100%;
+}
+.auth-page__right__form__password-details__item {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+  padding: 2px 0;
+}
+.auth-page__right__form__password-details__item:first-of-type {
+  padding-top: 0;
+}
+.auth-page__right__form__password-details__item__status {
+  background-color: #F44336;
+  border-radius: 4px;
+  display: block;
+  height: 8px;
+  width: 8px;
+}
+.auth-page__right__form__password-details__item__status.done {
+  background-color: #4caf50;
+}
+.auth-page__right__form__password-details__item__description {
+  font-size: 14px;
+}
+
+.footer {
+  padding: 12px 24px;
+  width: 100%;
+}
+@media (width < 40rem) {
+  .footer {
+    font-size: 12px;
+    text-align: center;
+  }
 }
 
 .button {
@@ -53,15 +152,56 @@ h1, h2, h3, p {
   color: inherit;
 }
 
-.footer {
-  padding: 12px 24px;
+.flash-message {
+  border-radius: 6px;
+  display: block;
+  font-size: 14px;
+  padding: 6px 12px;
+  text-align: center;
   width: 100%;
 }
-@media (width < 40rem) {
-  .footer {
-    font-size: 12px;
-    text-align: center;
-  }
+.flash-message--error {
+  background-color: #F44336;
+}
+
+.input__container {
+  align-items: center;
+  display: flex;
+}
+.input__container__icon--left, .input__container__icon--right {
+  align-items: center;
+  display: flex;
+  height: 32px;
+  justify-content: center;
+  width: 32px;
+}
+.input__container__icon--left {
+  background-color: #464B45;
+  border-radius: 6px 0 0 6px;
+}
+.input__container__icon--right {
+  background-color: #171717;
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
+}
+.input__container__input {
+  background-color: #171717;
+  border: none;
+  border-radius: 0 6px 6px 0;
+  color: inherit;
+  height: 32px;
+  flex: 1;
+  outline: none;
+  padding: 0 12px;
+}
+.input__container__input:has(+ .input__container__icon--right) {
+  border-radius: 0;
+}
+.input__error {
+  color: #F44336;
+  display: block;
+  font-size: 12px;
+  padding: 6px 12px;
 }
 
 .icon {
@@ -122,46 +262,6 @@ h1, h2, h3, p {
 .icon--whatsapp {
   -webkit-mask-image: url("/static/icons/brand-whatsapp.svg");
   mask-image: url("/static/icons/brand-whatsapp.svg");
-}
-
-.input__container {
-  align-items: center;
-  display: flex;
-}
-.input__container__icon--left, .input__container__icon--right {
-  align-items: center;
-  display: flex;
-  height: 32px;
-  justify-content: center;
-  width: 32px;
-}
-.input__container__icon--left {
-  background-color: #464B45;
-  border-radius: 6px 0 0 6px;
-}
-.input__container__icon--right {
-  background-color: #171717;
-  border-radius: 0 6px 6px 0;
-  cursor: pointer;
-}
-.input__container__input {
-  background-color: #171717;
-  border: none;
-  border-radius: 0 6px 6px 0;
-  color: inherit;
-  height: 32px;
-  flex: 1;
-  outline: none;
-  padding: 0 12px;
-}
-.input__container__input:has(+ .input__container__icon--right) {
-  border-radius: 0;
-}
-.input__error {
-  color: #F44336;
-  display: block;
-  font-size: 12px;
-  padding: 6px 12px;
 }
 
 .landing-page__about {
@@ -628,51 +728,6 @@ h1, h2, h3, p {
 .main-navigation__nav__content__ul__li__a {
   font-size: 16px;
   text-decoration: none;
-}
-
-.signin-page {
-  display: flex;
-  flex: 1;
-  padding: 12px 36px;
-}
-.signin-page__left {
-  min-width: 300px;
-}
-.signin-page__left__form {
-  align-items: end;
-  display: flex;
-  flex-flow: column;
-  gap: 12px;
-  margin-top: 36px;
-}
-.signin-page__left__form__flash-message {
-  background-color: #F44336;
-  border-radius: 6px;
-  font-size: 14px;
-  padding: 6px 12px;
-}
-.signin-page__left__form > .input {
-  min-width: 300px;
-  width: 100%;
-}
-
-.signup-page {
-  display: flex;
-  flex: 1;
-  padding: 12px 36px;
-}
-.signup-page__left {
-  min-width: 300px;
-}
-.signup-page__left__form {
-  align-items: end;
-  display: flex;
-  flex-flow: column;
-  gap: 12px;
-  margin-top: 36px;
-}
-.signup-page__left__form > .input {
-  width: 100%;
 }
 
 .text--title {

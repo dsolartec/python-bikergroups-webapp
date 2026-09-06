@@ -8,6 +8,7 @@ $secondary-color: #464B45;
 $tertiary-color: #EBC922;
 
 $error-color: #F44336;
+$success-color: #4caf50;
 
 $sm-width: 40rem;
 $md-width: 48rem;
@@ -50,6 +51,7 @@ button {
     background-color: transparent;
     border: none;
     cursor: pointer;
+    padding: 0;
 }
 
 h1, h2, h3, p {

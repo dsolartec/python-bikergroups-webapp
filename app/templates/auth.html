@@ -1,0 +1,142 @@
+{% import "helpers/forms.html" as forms_helpers %}
+{% extends "base.html" %}
+
+{% if request.endpoint == "web_views.signin_page" %}
+{% set signin_section_class = "show-mobile" %}
+{% set signup_section_class = "" %}
+{% else %}
+{% set signin_section_class = "" %}
+{% set signup_section_class = "show-mobile" %}
+{% endif %}
+
+{% block title %}
+{% if request.endpoint == "web_views.signin_page" %}
+Inicia sesión
+{% else %}
+Crea tu cuenta
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="auth-page">
+    <div class="auth-page__left {{ signin_section_class }}">
+        <h1 class="text text--title">Inicio de sesión</h1>
+        <form action="{{ url_for('web_views.signin_page') }}" id="signin-form" class="auth-page__left__form" method="POST">
+            {% for message in get_flashed_messages(category_filter=["signin.error"]) %}
+            <span class="flash-message flash-message--error">
+                {{ message }}
+            </span>
+            {% endfor %}
+            {{
+                forms_helpers.input(
+                    form_name="signin",
+                    name="phone",
+                    icon="phone",
+                    value=signin_form_data.phone,
+                    placeholder="Número de teléfono",
+                    type="number"
+                )
+            }}
+            {{
+                forms_helpers.input(
+                    form_name="signin",
+                    name="password",
+                    icon="lock",
+                    value=signin_form_data.password,
+                    placeholder="Contraseña",
+                    type="password"
+                )
+            }}
+            <button class="button button--primary" type="submit">
+                <span class="button__text">Ingresar</span>
+                <i class="button__icon icon icon--login-2"></i>
+            </button>
+        </form>
+        <div class="auth-page__left__go-to-signup">
+            <span>¿Quieres crear una cuenta?</span> <a href="{{ url_for('web_views.signup_page') }}">Haz click aquí</a>
+        </div>
+    </div>
+    <div class="auth-page__divider"></div>
+    <div class="auth-page__right {{ signup_section_class }}">
+        <h1 class="text text--title">Crea tu cuenta</h1>
+        <form action="{{ url_for('web_views.signup_page') }}" class="auth-page__right__form" id="signup-form" method="POST">
+            {{
+                forms_helpers.input(
+                    form_name="signup",
+                    name="display_name",
+                    icon="user",
+                    value=signup_form_data.display_name,
+                    placeholder="Nombre visible"
+                )
+            }}
+            {{
+                forms_helpers.input(
+                    form_name="signup",
+                    name="phone",
+                    icon="phone",
+                    value=signup_form_data.phone,
+                    placeholder="Número de teléfono",
+                    type="number"
+                )
+            }}
+            {{
+                forms_helpers.input(
+                    form_name="signup",
+                    name="password",
+                    icon="lock",
+                    value=signup_form_data.password,
+                    placeholder="Contraseña",
+                    type="password"
+                )
+            }}
+            <ul class="auth-page__right__form__password-details">
+                <li class="auth-page__right__form__password-details__item">
+                    <div class="auth-page__right__form__password-details__item__status" data-signup-password-length></div>
+                    <span class="auth-page__right__form__password-details__item__description">
+                        Mínimo 8 caracteres
+                    </span>
+                </li>
+                <li class="auth-page__right__form__password-details__item">
+                    <div class="auth-page__right__form__password-details__item__status" data-signup-password-uppers-length></div>
+                    <span class="auth-page__right__form__password-details__item__description">
+                        Mínimo 1 letra mayúscula
+                    </span>
+                </li>
+                <li class="auth-page__right__form__password-details__item">
+                    <div class="auth-page__right__form__password-details__item__status" data-signup-password-lowers-length></div>
+                    <span class="auth-page__right__form__password-details__item__description">
+                        Mínimo 1 letra minúscula
+                    </span>
+                </li>
+                <li class="auth-page__right__form__password-details__item">
+                    <div class="auth-page__right__form__password-details__item__status" data-signup-password-numbers-length></div>
+                    <span class="auth-page__right__form__password-details__item__description">
+                        Mínimo 1 número
+                    </span>
+                </li>
+            </ul>
+            {{
+                forms_helpers.input(
+                    form_name="signup",
+                    name="confirm_password",
+                    icon="lock",
+                    value=signup_form_data.confirm_password,
+                    placeholder="Confirma la contraseña",
+                    type="password"
+                )
+            }}
+            <p class="auth-page__right__form__terms">
+                Al darle click al botón de "Continuar" estarás aceptando los <a href="/" target="_blank">Términos y condiciones</a>.
+            </p>
+            <button class="button button--primary" type="submit">
+                <span class="button__text">Continuar</span>
+                <i class="button__icon icon icon--arrow-right"></i>
+            </button>
+        </form>
+        <div class="auth-page__left__go-to-signin">
+            <span>¿Ya tienes una cuenta?</span> <a href="{{ url_for('web_views.signin_page') }}">Inicia sesión</a>
+        </div>
+    </div>
+</section>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

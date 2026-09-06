@@ -12,7 +12,7 @@ document.querySelectorAll("[data-toggle-password-input]").forEach((btnEl) => {
         const inputName = btnEl.getAttribute("data-input-name");
         if (!inputName) return;
 
-        const inputEl = document.querySelector(`input[name="${inputName}"]`);
+        const inputEl = document.querySelector(`#${inputName} input`);
         if (!inputEl) return;
 
         const iconEl = btnEl.querySelector(".icon");

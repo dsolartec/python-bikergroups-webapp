@@ -1,5 +1,38 @@
 @use 'base';
 
+.button {
+    align-items: center;
+    border-radius: 6px;
+    color: inherit;
+    display: flex;
+    gap: 4px;
+    padding: 6px 12px;
+    text-decoration: none;
+
+    &--primary {
+        background-color: base.$primary-color;
+    }
+    &--secondary {
+        background-color: base.$secondary-color;
+    }
+    &__text {
+        color: inherit;
+    }
+}
+
+.flash-message {
+    border-radius: 6px;
+    display: block;
+    font-size: 14px;
+    padding: 6px 12px;
+    text-align: center;
+    width: 100%;
+
+    &--error {
+        background-color: base.$error-color;
+    }
+}
+
 .input {
     &__container {
         $self: &;
