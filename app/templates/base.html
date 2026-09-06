@@ -18,7 +18,7 @@
         </div>
 
         <nav class="main-navigation__nav">
-            <div class="main-navigation__nav__bg"></div>
+            <div class="main-navigation__nav__bg" data-toggle-main-navigation></div>
             <div class="main-navigation__nav__content">
                 <div class="main-navigation__nav__content__header main-navigation__logo">
                     <button class="main-navigation__logo__open-menu-button" data-toggle-main-navigation>
@@ -41,8 +41,21 @@
                 </ul>
                 <ul class="main-navigation__nav__content__ul main-navigation__nav__content__ul--bottom">
                     {% if g.user %}
-                    <li>
-                        {{ g.user.display_name }}
+                    <li class="main-navigation__nav__content__ul__li hide-on-sm">
+                        <button class="button button--primary">
+                            <i class="button__icon button__icon--left icon icon--user-circle"></i>
+                            <span class="button__text">{{ g.user.display_name }}</span>
+                        </button>
+                    </li>
+                    <li class="main-navigation__nav__content__ul__li only-show-sm">
+                        <a class="main-navigation__nav__content__ul__li__a button button--primary" href="/">
+                            <span class="button__text">Panel de control</span>
+                        </a>
+                    </li>
+                    <li class="main-navigation__nav__content__ul__li only-show-sm">
+                        <a class="main-navigation__nav__content__ul__li__a button button--secondary" href="{{ url_for('web_views.signout_page') }}">
+                            <span class="button__text">Cerrar sesión</span>
+                        </a>
                     </li>
                     {% else %}
                     <li class="main-navigation__nav__content__ul__li">

@@ -71,6 +71,11 @@
     &--user {
         -webkit-mask-image: url("/static/icons/user.svg");
         mask-image: url("/static/icons/user.svg");
+
+        &-circle {
+            -webkit-mask-image: url("/static/icons/user-circle.svg");
+            mask-image: url("/static/icons/user-circle.svg");
+        }
     }
     &--whatsapp {
         -webkit-mask-image: url("/static/icons/brand-whatsapp.svg");

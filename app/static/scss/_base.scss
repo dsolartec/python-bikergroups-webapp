@@ -57,3 +57,17 @@ button {
 h1, h2, h3, p {
     margin: 0;
 }
+
+// Responsive
+
+.hide-on-sm {
+    @media (width < $sm-width) {
+        display: none;
+    }
+}
+
+.only-show-sm {
+    @media (width >= $sm-width) {
+        display: none;
+    }
+}

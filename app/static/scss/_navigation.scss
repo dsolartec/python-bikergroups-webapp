@@ -123,13 +123,21 @@
                     }
                 }
                 &--bottom {
-                    @media (width < base.$sm-width) {
-                        #{ $self }__li {
-                            width: 100%;
+                    gap: 12px;
 
-                            & .button {
-                                justify-content: center;
-                            }
+                    @media (width >= base.$sm-width) {
+                        gap: 24px;
+                    }
+
+                    #{ $self }__li {
+                        width: 100%;
+
+                        @media (width >= base.$sm-width) {
+                            width: auto;
+                        }
+
+                        & .button {
+                            justify-content: center;
                         }
                     }
                 }
