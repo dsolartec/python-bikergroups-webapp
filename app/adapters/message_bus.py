@@ -1,4 +1,4 @@
-from typing import Any, Callable, Type
+from typing import Callable, Type
 
 from app.domain.commands.base_command import BaseCommand
 from app.domain.ports.abstract_container import AbstractContainer
