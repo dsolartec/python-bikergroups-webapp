@@ -13,6 +13,24 @@
         -webkit-mask-image: url("/static/icons/arrow-right.svg");
         mask-image: url("/static/icons/arrow-right.svg");
     }
+    &--chevron-left {
+        -webkit-mask-image: url("/static/icons/chevron-left.svg");
+        mask-image: url("/static/icons/chevron-left.svg");
+
+        &-pipe {
+            -webkit-mask-image: url("/static/icons/chevron-left-pipe.svg");
+            mask-image: url("/static/icons/chevron-left-pipe.svg");
+        }
+    }
+    &--chevron-right {
+        -webkit-mask-image: url("/static/icons/chevron-right.svg");
+        mask-image: url("/static/icons/chevron-right.svg");
+
+        &-pipe {
+            -webkit-mask-image: url("/static/icons/chevron-right-pipe.svg");
+            mask-image: url("/static/icons/chevron-right-pipe.svg");
+        }
+    }
     &--close {
         -webkit-mask-image: url("/static/icons/close.svg");
         mask-image: url("/static/icons/close.svg");

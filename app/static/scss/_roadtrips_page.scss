@@ -1,0 +1,47 @@
+@use 'base';
+
+.roadtrips-page {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    flex-flow: column;
+    padding: 12px 24px;
+
+    @media (width >= base.$lg-width) {
+        flex: 0;
+        padding: 12px 36px;
+    }
+
+    & .text--title {
+        width: 100%;
+    }
+    &__content {
+        display: flex;
+        flex-flow: column;
+        gap: 24px;
+        margin: 48px 0;
+
+        @media (width >= base.$sm-width) {
+            flex-flow: row;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        @media (width >= base.$lg-width) {
+            max-width: calc(320px * 3 + 24px * 2);
+        }
+    }
+    &__pagination {
+        align-items: center;
+        display: flex;
+        gap: 12px;
+
+        &__button {
+            text-decoration: none;
+
+            &--active {
+                text-decoration: underline;
+            }
+        }
+    }
+}

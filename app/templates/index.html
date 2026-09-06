@@ -1,3 +1,4 @@
+{% from "helpers/roadtrips.html" import render_roadtrip %}
 {% extends "base.html" %}
 
 {% block title %}Inicio{% endblock %}
@@ -47,31 +48,6 @@
     {% if recent_roadtrips %}
     {% set roadtrips_rest_height = 607 * (recent_roadtrips.rest|length // 2 + 1) + (24 * recent_roadtrips.rest|length // 2) %}
     <div class="landing-page__roadtrips__content" style="height: {{ roadtrips_rest_height }}px;">
-        {% macro render_roadtrip(roadtrip) -%}
-        <div class="landing-page__roadtrips__content__roadtrip">
-            <div
-                class="landing-page__roadtrips__content__roadtrip__image"
-                style="background-image: url('/static/images/roadtrips/{{ roadtrip.id }}.jpeg')"
-            ></div>
-            <div class="landing-page__roadtrips__content__roadtrip__info">
-                <h3>{{ roadtrip.start_at.strftime('%d de %B') }}</h3>
-                <p><b>Destino:</b> {{ roadtrip.end_coordinates.name }}</p>
-                <p><b>Hora de salida:</b> {{ roadtrip.start_at.strftime('%H:%M') }}</p>
-                <p><b>Punto de salida:</b> {{ roadtrip.start_coordinates.name }}</p>
-            </div>
-            <div class="landing-page__roadtrips__content__roadtrip__actions">
-                <a
-                    class="button button--primary"
-                    href="https://www.google.com/maps/search/{{ roadtrip.start_coordinates.latitude }},+{{ roadtrip.start_coordinates.longitude }}"
-                    target="_blank"
-                >
-                    <i class="button__icon button__icon--left icon icon--map-pin-share"></i>
-                    <span class="button__text">Ver en maps</span>
-                </a>
-            </div>
-        </div>
-        {%- endmacro %}
-
         <div class="landing-page__roadtrips__content__first">
             {{ render_roadtrip(recent_roadtrips.first) }}
         </div>

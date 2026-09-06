@@ -47,6 +47,9 @@ class RoadTripsUseCases:
             message_bus: AbstractMessageBus,
             container: AbstractContainer,
     ) -> tuple[list[RoadTripModel], int, int]:
+        if cmd.current_page < 1:
+            raise BadRequestException("Current page is invalid")
+
         with container.unit_of_work() as uow:
             total_count = uow.roadtrip_repository.count()
 
@@ -55,11 +58,11 @@ class RoadTripsUseCases:
                 max_pages += 1
 
             if cmd.current_page > max_pages:
-                raise BadRequestException("Current page is higher than max pages")
+                return [], total_count, max_pages
 
             roadtrips = uow.roadtrip_repository.get_many(
                 limit=cmd.limit,
-                offset=cmd.current_page * cmd.limit,
+                offset=(cmd.current_page - 1) * cmd.limit,
             )
 
             return roadtrips, total_count, max_pages

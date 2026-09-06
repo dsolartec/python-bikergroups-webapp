@@ -1,0 +1,41 @@
+{% from "helpers/roadtrips.html" import render_roadtrip %}
+{% extends "base.html" %}
+
+{% block content %}
+<section class="roadtrips-page">
+    <h1 class="text text--title">{% block title %}Rodadas{% endblock %}</h1>
+    <div class="roadtrips-page__content">
+        {% for roadtrip in page_roadtrips %}
+        {{ render_roadtrip(roadtrip) }}
+        {% endfor %}
+    </div>
+    <div class="roadtrips-page__pagination">
+        <a class="roadtrips-page__pagination__button" href="{{ url_for('web_views.roadtrips_page', page=1) }}">
+            <i class="icon icon--chevron-left-pipe"></i>
+        </a>
+        <a
+            class="roadtrips-page__pagination__button"
+            href="{{ url_for('web_views.roadtrips_page', page=current_page-1 if current_page > 1 else 1) }}"
+        >
+            <i class="icon icon--chevron-left"></i>
+        </a>
+        {% for page_number in range(max_pages) %}
+        <a
+            class="roadtrips-page__pagination__button {{ 'roadtrips-page__pagination__button--active' if current_page == (page_number + 1) else '' }}"
+            href="{{ url_for('web_views.roadtrips_page', page=page_number+1) }}"
+        >
+            {{ page_number + 1 }}
+        </a>
+        {% endfor %}
+        <a
+            class="roadtrips-page__pagination__button"
+            href="{{ url_for('web_views.roadtrips_page', page=current_page+1 if current_page < max_pages else max_pages) }}"
+        >
+            <i class="icon icon--chevron-right"></i>
+        </a>
+        <a class="roadtrips-page__pagination__button" href="{{ url_for('web_views.roadtrips_page', page=max_pages) }}">
+            <i class="icon icon--chevron-right-pipe"></i>
+        </a>
+    </div>
+</section>
+{% endblock %}

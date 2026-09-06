@@ -1,0 +1,25 @@
+{% macro render_roadtrip(roadtrip) -%}
+<div class="roadtrip">
+    <a
+        class="roadtrip__image"
+        href="/"
+        style="background-image: url('/static/images/roadtrips/{{ roadtrip.id }}.jpeg')"
+    ></a>
+    <div class="roadtrip__info">
+        <h3>{{ roadtrip.start_at.strftime('%d de %B') }}</h3>
+        <p><b>Destino:</b> {{ roadtrip.end_coordinates.name }}</p>
+        <p><b>Hora de salida:</b> {{ roadtrip.start_at.strftime('%H:%M') }}</p>
+        <p><b>Punto de salida:</b> {{ roadtrip.start_coordinates.name }}</p>
+    </div>
+    <div class="roadtrip__actions">
+        <a
+            class="button button--primary"
+            href="https://www.google.com/maps/search/{{ roadtrip.start_coordinates.latitude }},+{{ roadtrip.start_coordinates.longitude }}"
+            target="_blank"
+        >
+            <i class="button__icon button__icon--left icon icon--map-pin-share"></i>
+            <span class="button__text">Ver en maps</span>
+        </a>
+    </div>
+</div>
+{%- endmacro %}

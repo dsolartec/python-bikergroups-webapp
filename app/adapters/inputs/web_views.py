@@ -40,7 +40,7 @@ def landing_page():
     roadtrips_count: int
 
     recent_roadtrips, roadtrips_count, _ = message_bus.handle(GetAllRoadtripsPaginatedCommand(
-        current_page=0,
+        current_page=1,
         limit=5,
     ))
 
@@ -51,6 +51,28 @@ def landing_page():
             "rest": recent_roadtrips[1:],
         },
         roadtrips_count=roadtrips_count,
+    )
+
+
+@web_views.get("/roadtrips")
+def roadtrips_page():
+    current_page = request.args.get("page", default=1, type=int)
+
+    page_roadtrips: list[RoadTripModel]
+    total_roadtrips_count: int
+    max_pages: int
+
+    page_roadtrips, total_roadtrips_count, max_pages = message_bus.handle(GetAllRoadtripsPaginatedCommand(
+        current_page=current_page,
+        limit=6,
+    ))
+
+    return render_template(
+        "roadtrips.html",
+        page_roadtrips=page_roadtrips,
+        total_roadtrips_count=total_roadtrips_count,
+        current_page=current_page,
+        max_pages=max_pages,
     )
 
 
