@@ -12,7 +12,11 @@
             value="{{ value|e }}"
         >
         {% if type == "password" %}
-        <div class="input__container__icon input__container__icon--right">
+        <div
+            class="input__container__icon input__container__icon--right"
+            data-toggle-password-input
+            data-input-name="{{ name }}"
+        >
             <i class="icon icon--eye"></i>
         </div>
         {% endif %}

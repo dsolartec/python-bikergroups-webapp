@@ -22,6 +22,7 @@
             &--right {
                 background-color: base.$secondary-background-color;
                 border-radius: 0 6px 6px 0;
+                cursor: pointer;
             }
         }
         &__input {

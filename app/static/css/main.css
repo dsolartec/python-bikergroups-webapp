@@ -142,6 +142,7 @@ h1, h2, h3, p {
 .input__container__icon--right {
   background-color: #171717;
   border-radius: 0 6px 6px 0;
+  cursor: pointer;
 }
 .input__container__input {
   background-color: #171717;
