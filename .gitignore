@@ -1,6 +1,6 @@
 # Production directories
 app/static/images/roadtrips/*.jpeg
-app/static/css/*
+app/static/css/
 
 # Logging
 *.log
