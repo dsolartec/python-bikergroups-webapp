@@ -9,6 +9,10 @@
     mask-size: contain;
     width: 24px;
 
+    &--arrow-right {
+        -webkit-mask-image: url("/static/icons/arrow-right.svg");
+        mask-image: url("/static/icons/arrow-right.svg");
+    }
     &--close {
         -webkit-mask-image: url("/static/icons/close.svg");
         mask-image: url("/static/icons/close.svg");
@@ -45,6 +49,10 @@
     &--phone {
         -webkit-mask-image: url("/static/icons/phone.svg");
         mask-image: url("/static/icons/phone.svg");
+    }
+    &--user {
+        -webkit-mask-image: url("/static/icons/user.svg");
+        mask-image: url("/static/icons/user.svg");
     }
     &--whatsapp {
         -webkit-mask-image: url("/static/icons/brand-whatsapp.svg");

@@ -1,0 +1,61 @@
+{% import "helpers/forms.html" as forms_helpers %}
+{% extends "base.html" %}
+
+{% block content %}
+<section class="signup-page">
+    <div class="signup-page__left">
+        <h1 class="text text--title">{% block title %}Crea tu cuenta{% endblock %}</h1>
+        <form class="signup-page__left__form" method="post">
+            {{
+                forms_helpers.input(
+                    form_name="signup",
+                    name="display_name",
+                    icon="user",
+                    value=form_data.display_name,
+                    placeholder="Nombre visible"
+                )
+            }}
+            {{
+                forms_helpers.input(
+                    form_name="signup",
+                    name="phone",
+                    icon="phone",
+                    value=form_data.phone,
+                    placeholder="Número de teléfono",
+                    type="number"
+                )
+            }}
+            {{
+                forms_helpers.input(
+                    form_name="signup",
+                    name="password",
+                    icon="lock",
+                    value=form_data.password,
+                    placeholder="Contraseña",
+                    type="password"
+                )
+            }}
+            <ul>
+                <li>Mínimo 8 caracteres</li>
+                <li>Mínimo 1 letra mayúscula</li>
+                <li>Mínimo 1 letra minúscula</li>
+                <li>Mínimo 1 número</li>
+            </ul>
+            {{
+                forms_helpers.input(
+                    form_name="signup",
+                    name="confirm_password",
+                    icon="lock",
+                    value=form_data.confirm_password,
+                    placeholder="Confirma la contraseña",
+                    type="password"
+                )
+            }}
+            <button class="button button--primary" type="submit">
+                <span class="button__text">Continuar</span>
+                <i class="button__icon icon icon--arrow-right"></i>
+            </button>
+        </form>
+    </div>
+</section>
+{% endblock %}

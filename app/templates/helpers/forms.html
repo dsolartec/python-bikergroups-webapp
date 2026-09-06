@@ -1,18 +1,26 @@
-{% macro input(form_name, name, icon, placeholder="", type="text") -%}
+{% macro input(form_name, name, icon, value="", placeholder="", type="text") -%}
 <div class="input">
-    <div class="input__icon input__icon--left">
-        <i class="icon icon--{{ icon }}"></i>
+    <div class="input__container">
+        <div class="input__container__icon input__container__icon--left">
+            <i class="icon icon--{{ icon }}"></i>
+        </div>
+        <input
+            class="input__container__input"
+            name="{{ name }}"
+            placeholder="{{ placeholder }}"
+            type="{{ type }}"
+            value="{{ value|e }}"
+        >
+        {% if type == "password" %}
+        <div class="input__container__icon input__container__icon--right">
+            <i class="icon icon--eye"></i>
+        </div>
+        {% endif %}
     </div>
-    <input class="input__input" name="{{ name }}" placeholder="{{ placeholder }}" type="{{ type }}">
-    {% if type == "password" %}
-    <div class="input__icon input__icon--right">
-        <i class="icon icon--eye"></i>
-    </div>
-    {% endif %}
+    {% for message in get_flashed_messages(category_filter="%s.%s.error" | format(form_name, name)) %}
+    <span class="input__error">
+        {{ message }}
+    </span>
+    {% endfor %}
 </div>
-{% for message in get_flashed_messages(category_filter="%s.%s.error" | format(form_name, name)) %}
-<span class="input-error">
-    {{ message }}
-</span>
-{% endfor %}
 {%- endmacro %}
