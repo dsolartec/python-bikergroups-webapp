@@ -11,8 +11,24 @@
                 {{ message }}
             </span>
             {% endfor %}
-            {{ forms_helpers.input(name="phone", icon="phone", placeholder="Número de teléfono", type="number") }}
-            {{ forms_helpers.input(name="password", icon="lock", placeholder="Contraseña", type="password") }}
+            {{
+                forms_helpers.input(
+                    form_name="signin",
+                    name="phone",
+                    icon="phone",
+                    placeholder="Número de teléfono",
+                    type="number"
+                )
+            }}
+            {{
+                forms_helpers.input(
+                    form_name="signin",
+                    name="password",
+                    icon="lock",
+                    placeholder="Contraseña",
+                    type="password"
+                )
+            }}
             <button class="button button--primary" type="submit">
                 <span class="button__text">Ingresar</span>
                 <i class="button__icon icon icon--login-2"></i>

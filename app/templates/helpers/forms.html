@@ -1,4 +1,4 @@
-{% macro input(name, icon, placeholder="", type="text") -%}
+{% macro input(form_name, name, icon, placeholder="", type="text") -%}
 <div class="input">
     <div class="input__icon input__icon--left">
         <i class="icon icon--{{ icon }}"></i>
@@ -10,4 +10,9 @@
     </div>
     {% endif %}
 </div>
+{% for message in get_flashed_messages(category_filter="%s.%s.error" | format(form_name, name)) %}
+<span class="input-error">
+    {{ message }}
+</span>
+{% endfor %}
 {%- endmacro %}
