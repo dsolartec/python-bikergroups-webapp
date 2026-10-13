@@ -1,3 +1,14 @@
+const profileMenuDropdownTemplate = document.getElementById("profile-menu-dropdown-template");
+
+tippy("#profile-menu-dropdown", {
+    allowHTML: true,
+    content: profileMenuDropdownTemplate.innerHTML,
+    interactive: true,
+    placement: "bottom",
+    theme: "profile-menu-dropdown",
+    trigger: "click",
+});
+
 document.querySelectorAll("[data-toggle-main-navigation]").forEach((btnEl) => {
     btnEl.addEventListener('click', () => {
         const mainNavigationEl = document.querySelector(".main-navigation__nav");

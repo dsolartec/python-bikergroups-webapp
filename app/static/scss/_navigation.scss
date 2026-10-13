@@ -151,3 +151,21 @@
         }
     }
 }
+
+.tippy-box[data-theme~='profile-menu-dropdown'] {
+    background-color: base.$secondary-background-color;
+
+    & .tippy-content {
+        border-radius: 6px;
+        padding: 12px;
+    }
+    & .tippy-arrow::before {
+        border-bottom-color: base.$secondary-background-color;
+    }
+}
+
+.profile-menu-dropdown {
+    display: flex;
+    flex-flow: column wrap;
+    gap: 8px;
+}
