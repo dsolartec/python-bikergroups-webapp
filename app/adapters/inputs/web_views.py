@@ -6,6 +6,7 @@ from app.adapters.outputs.decorators.require_permissions import require_permissi
 from app.adapters.outputs.decorators.require_unlogged import require_unlogged
 from app.bootstrap import bootstrap
 from app.domain.commands.get_all_roadtrips_paginated_command import GetAllRoadtripsPaginatedCommand
+from app.domain.commands.get_roadtrip_by_id_command import GetRoadTripByIDCommand
 from app.domain.commands.get_user_by_id_command import GetUserByIDCommand
 from app.domain.commands.signin_command import SignInCommand
 from app.domain.commands.signup_command import SignUpCommand
@@ -64,6 +65,18 @@ def roadtrips_page():
         total_roadtrips_count=total_roadtrips_count,
         current_page=current_page,
         max_pages=max_pages,
+    )
+
+
+@web_views.get("/roadtrip/<string:roadtrip_id>")
+def roadtrip_page(roadtrip_id: str):
+    roadtrip = message_bus.handle(GetRoadTripByIDCommand(
+        id=roadtrip_id,
+    ))
+
+    return render_template(
+        "roadtrip.html",
+        roadtrip=roadtrip,
     )
 
 

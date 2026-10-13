@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="roadtrip-page">
+    <h1 class="text text--title">{% block title %}{{ roadtrip.display_name }}{% endblock %}</h1>
+    <div class="roadtrip-page__content">
+        <section class="roadtrip-page__content__roadtrip">
+            <div class="roadtrip-page__content__roadtrip__left">
+                <div
+                    class="roadtrip-page__content__roadtrip__left__image"
+                    style="background-image: url('/static/images/roadtrips/{{ roadtrip.id }}.jpeg')"
+                ></div>
+            </div>
+            <div class="roadtrip-page__content__roadtrip__right">
+                <ul class="roadtrip-page__content__roadtrip__right__description">
+                    <li><b>Fecha de salida:</b> {{ roadtrip.start_at.strftime('%d de %B') }}</li>
+                    <li><b>Hora de salida:</b> {{ roadtrip.start_at.strftime('%H:%M') }}</li>
+                    <li><b>Destino:</b> {{ roadtrip.end_coordinates.name }}</li>
+                    <li><b>Punto de salida:</b> {{ roadtrip.start_coordinates.name }}</li>
+                </ul>
+                <div class="roadtrip-page__content__roadtrip__right__actions">
+                    <a
+                        class="button button--primary"
+                        href="https://www.google.com/maps/search/{{ roadtrip.start_coordinates.latitude }},+{{ roadtrip.start_coordinates.longitude }}"
+                        target="_blank"
+                    >
+                        <i class="button__icon button__icon--left icon icon--map-pin-share"></i>
+                        <span class="button__text">Ver en maps</span>
+                    </a>
+                    {% if g.user %}
+                    <a
+                        class="button button--secondary"
+                        href="#"
+                        target="_blank"
+                    >
+                        <i class="button__icon button__icon--left icon icon--calendar-check"></i>
+                        <span class="button__text">Confirmar asistencia</span>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+        <div class="roadtrip-page__content__divider"></div>
+        <section class="roadtrip-page__content__related">
+            
+        </section>
+    </div>
+</main>
+{% endblock %}

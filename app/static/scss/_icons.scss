@@ -13,6 +13,10 @@
         -webkit-mask-image: url("/static/icons/arrow-right.svg");
         mask-image: url("/static/icons/arrow-right.svg");
     }
+    &--calendar-check {
+        -webkit-mask-image: url("/static/icons/calendar-check.svg");
+        mask-image: url("/static/icons/calendar-check.svg");
+    }
     &--chevron-left {
         -webkit-mask-image: url("/static/icons/chevron-left.svg");
         mask-image: url("/static/icons/chevron-left.svg");
