@@ -10,6 +10,7 @@ from app.domain.commands.get_roadtrip_by_id_command import GetRoadTripByIDComman
 from app.domain.commands.get_user_by_id_command import GetUserByIDCommand
 from app.domain.commands.signin_command import SignInCommand
 from app.domain.commands.signup_command import SignUpCommand
+from app.domain.enums.permission_enum import PermissionEnum
 from app.domain.exceptions.not_found_exception import NotFoundException
 from app.domain.exceptions.phone_already_exists_exception import PhoneAlreadyExistsException
 from app.domain.exceptions.wrong_credentials_exception import WrongCredentialsException
@@ -21,15 +22,26 @@ message_bus = bootstrap()
 
 @web_views.before_app_request
 def load_logged_user_from_session():
+    g.in_hk = False
+
     user_id = session.get("user_id")
     if user_id is None:
+        g.can_hk = False
         g.user = None
         return
 
     try:
-        g.user = message_bus.handle(GetUserByIDCommand(id=user_id))
+        g.can_hk = False
+        g.user = message_bus.handle(GetUserByIDCommand(id=user_id, with_permissions=True))
+
+        for permission in [PermissionEnum.CAN_CREATE_ROADTRIP, PermissionEnum.CAN_UPDATE_ROADTRIP]:
+            if permission in g.user.permissions:
+                g.can_hk = True
+                break
     except NotFoundException:
         session.clear()
+
+        g.can_hk = False
         g.user = None
 
 

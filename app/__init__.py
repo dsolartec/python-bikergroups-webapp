@@ -5,6 +5,7 @@ from flask import Flask, jsonify
 from pydantic import ValidationError
 
 from app.adapters.container import Container
+from app.adapters.inputs.admin_views import admin_views
 from app.adapters.inputs.web_views import web_views
 from app.domain.exceptions.base_http_exception import BaseHTTPException
 
@@ -50,5 +51,6 @@ def create_app():
 
     app.register_error_handler(Exception, error_middleware)
     app.register_blueprint(web_views)
+    app.register_blueprint(admin_views)
 
     return app

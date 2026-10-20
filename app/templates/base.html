@@ -50,9 +50,11 @@
                         </button>
                         <div id="profile-menu-dropdown-template" style="display: none;">
                             <div class="profile-menu-dropdown">
-                                <a class="profile-menu-dropdown__button button button--primary" href="/">
+                                {% if g.can_hk %}
+                                <a class="profile-menu-dropdown__button button button--primary" href="/admin/">
                                     <span class="button__text">Panel de control</span>
                                 </a>
+                                {% endif %}
                                 <a
                                     class="profile-menu-dropdown__button button button--secondary"
                                     href="{{ url_for('web_views.signout_page') }}"
@@ -62,11 +64,13 @@
                             </div>
                         </div>
                     </li>
+                    {% if g.can_hk %}
                     <li class="main-navigation__nav__content__ul__li only-show-sm">
-                        <a class="main-navigation__nav__content__ul__li__a button button--primary" href="/">
+                        <a class="main-navigation__nav__content__ul__li__a button button--primary" href="/admin/">
                             <span class="button__text">Panel de control</span>
                         </a>
                     </li>
+                    {% endif %}
                     <li class="main-navigation__nav__content__ul__li only-show-sm">
                         <a class="main-navigation__nav__content__ul__li__a button button--secondary" href="{{ url_for('web_views.signout_page') }}">
                             <span class="button__text">Cerrar sesión</span>
@@ -84,7 +88,22 @@
         </nav>
     </section>
 
+    {% if g.can_hk and g.in_hk %}
+    <main class="hk">
+        <nav class="hk__nav">
+            <h2>Panel de control</h2>
+            <ul>
+                <li><a>Inicio</a></li>
+                <li><a>Rodadas</a></li>
+            </ul>
+        </nav>
+        <section>
+            {% block hk_content %}{% endblock %}
+        </section>
+    </main>
+    {% else %}
     {% block content %}{% endblock %}
+    {% endif %}
 
     <footer class="footer">
         <p>HIMALEGENDS 2026 © Todos los derechos reservados</p>
