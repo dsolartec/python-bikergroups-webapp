@@ -15,6 +15,9 @@
     &--secondary {
         background-color: base.$secondary-color;
     }
+    &--danger {
+        background-color: base.$error-color;
+    }
     &__text {
         color: inherit;
     }
@@ -31,9 +34,19 @@
     &--error {
         background-color: base.$error-color;
     }
+    &--success {
+        background-color: base.$success-color;
+    }
 }
 
 .input {
+    &__label {
+        color: rgba(white, 0.85);
+        display: block;
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 6px;
+    }
     &__container {
         $self: &;
 
@@ -63,6 +76,7 @@
             border: none;
             border-radius: 0 6px 6px 0;
             color: inherit;
+            color-scheme: dark;
             height: 32px;
             flex: 1;
             outline: none;

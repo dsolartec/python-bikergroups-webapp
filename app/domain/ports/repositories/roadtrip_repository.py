@@ -9,6 +9,10 @@ class RoadTripRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def count_upcoming(self) -> int:
+        raise NotImplementedError
+
+    @abstractmethod
     def get_by_id(self, roadtrip_id: str) -> RoadTripModel:
         raise NotImplementedError
 

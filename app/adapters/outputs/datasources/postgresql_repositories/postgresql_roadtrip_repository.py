@@ -13,12 +13,19 @@ from app.domain.ports.repositories.roadtrip_repository import RoadTripRepository
 
 class PostgreSQLRoadTripRepository(RoadTripRepository):
     _session: Session
-        
+
     def __init__(self, session: Session):
         self._session = session
 
     def count(self) -> int:
         return self._session.scalar(select(func.count()).select_from(RoadTripEntity)) or 0
+
+    def count_upcoming(self) -> int:
+        return self._session.scalar(
+            select(func.count()) \
+                .select_from(RoadTripEntity) \
+                    .filter(RoadTripEntity.start_at > func.current_timestamp())
+        ) or 0
 
     def get_by_id(self, roadtrip_id: str) -> RoadTripModel:
         roadtrip_entity = self._session.scalar(select(RoadTripEntity).where(RoadTripEntity.id == UUID(roadtrip_id)))

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
+    {% block extra_head %}{% endblock %}
 </head>
 <body>
     <!-- Navigation -->
@@ -91,13 +92,38 @@
     {% if g.can_hk and g.in_hk %}
     <main class="hk">
         <nav class="hk__nav">
-            <h2>Panel de control</h2>
-            <ul>
-                <li><a>Inicio</a></li>
-                <li><a>Rodadas</a></li>
+            <h2 class="hk__nav__title text text--title">Panel de control</h2>
+            <ul class="hk__nav__ul">
+                <li class="hk__nav__ul__li">
+                    <a
+                        class="hk__nav__ul__li__a {{ 'hk__nav__ul__li__a--active' if request.endpoint == 'admin_views.index_admin_page' else '' }}"
+                        href="{{ url_for('admin_views.index_admin_page') }}"
+                    >
+                        <i class="icon icon--home"></i>
+                        <span>Inicio</span>
+                    </a>
+                </li>
+                <li class="hk__nav__ul__li">
+                    <a
+                        class="hk__nav__ul__li__a {{ 'hk__nav__ul__li__a--active' if request.endpoint in ['admin_views.roadtrips_admin_page', 'admin_views.create_roadtrip_admin_page', 'admin_views.edit_roadtrip_admin_page'] else '' }}"
+                        href="{{ url_for('admin_views.roadtrips_admin_page') }}"
+                    >
+                        <i class="icon icon--road"></i>
+                        <span>Rodadas</span>
+                    </a>
+                </li>
+                <li class="hk__nav__ul__li">
+                    <a
+                        class="hk__nav__ul__li__a {{ 'hk__nav__ul__li__a--active' if request.endpoint == 'admin_views.users_admin_page' else '' }}"
+                        href="{{ url_for('admin_views.users_admin_page') }}"
+                    >
+                        <i class="icon icon--users"></i>
+                        <span>Usuarios</span>
+                    </a>
+                </li>
             </ul>
         </nav>
-        <section>
+        <section class="hk__content">
             {% block hk_content %}{% endblock %}
         </section>
     </main>
@@ -110,5 +136,6 @@
     </footer>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_scripts %}{% endblock %}
 </body>
 </html>

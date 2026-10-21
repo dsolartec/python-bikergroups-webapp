@@ -1,7 +1,7 @@
 from uuid import UUID
 
 from psycopg2.errors import UniqueViolation
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, selectinload
 
@@ -17,6 +17,9 @@ class PostgreSQLUserRepository(UserRepository):
 
     def __init__(self, session: Session):
         self._session = session
+
+    def count(self) -> int:
+        return self._session.scalar(select(func.count()).select_from(UserEntity)) or 0
 
     def get_by_id(self, user_id: str, with_permissions: bool = False) -> UserModel:
         statement = select(UserEntity).where(UserEntity.id == UUID(user_id))
@@ -39,6 +42,16 @@ class PostgreSQLUserRepository(UserRepository):
             raise NotFoundException("User not found")
 
         return user_entity.to_model()
+
+    def get_many(self, limit: int, offset: int) -> list[UserModel]:
+        users_entities = self._session.scalars(
+            select(UserEntity) \
+                .limit(limit) \
+                    .offset(offset) \
+                        .order_by(UserEntity.created_at.desc()),
+        ).all()
+
+        return [user_entity.to_model() for user_entity in users_entities]
 
     def save(self, user: UserModel) -> UserModel:
         user_entity = UserEntity.from_model(user)

@@ -9,13 +9,22 @@
     mask-size: contain;
     width: 24px;
 
+    &--arrow-left {
+        -webkit-mask-image: url("/static/icons/arrow-left.svg");
+        mask-image: url("/static/icons/arrow-left.svg");
+    }
     &--arrow-right {
         -webkit-mask-image: url("/static/icons/arrow-right.svg");
         mask-image: url("/static/icons/arrow-right.svg");
     }
-    &--calendar-check {
-        -webkit-mask-image: url("/static/icons/calendar-check.svg");
-        mask-image: url("/static/icons/calendar-check.svg");
+    &--calendar {
+        -webkit-mask-image: url("/static/icons/calendar.svg");
+        mask-image: url("/static/icons/calendar.svg");
+
+        &-check {
+            -webkit-mask-image: url("/static/icons/calendar-check.svg");
+            mask-image: url("/static/icons/calendar-check.svg");
+        }
     }
     &--chevron-left {
         -webkit-mask-image: url("/static/icons/chevron-left.svg");
@@ -35,9 +44,17 @@
             mask-image: url("/static/icons/chevron-right-pipe.svg");
         }
     }
+    &--clock {
+        -webkit-mask-image: url("/static/icons/clock.svg");
+        mask-image: url("/static/icons/clock.svg");
+    }
     &--close {
         -webkit-mask-image: url("/static/icons/close.svg");
         mask-image: url("/static/icons/close.svg");
+    }
+    &--edit {
+        -webkit-mask-image: url("/static/icons/edit.svg");
+        mask-image: url("/static/icons/edit.svg");
     }
     &--eye {
         -webkit-mask-image: url("/static/icons/eye.svg");
@@ -47,6 +64,10 @@
             -webkit-mask-image: url("/static/icons/eye-off.svg");
             mask-image: url("/static/icons/eye-off.svg");
         }
+    }
+    &--home {
+        -webkit-mask-image: url("/static/icons/home.svg");
+        mask-image: url("/static/icons/home.svg");
     }
     &--instagram {
         -webkit-mask-image: url("/static/icons/brand-instagram.svg");
@@ -60,9 +81,14 @@
         -webkit-mask-image: url("/static/icons/login-2.svg");
         mask-image: url("/static/icons/login-2.svg");
     }
-    &--map-pin-share {
-        -webkit-mask-image: url("/static/icons/map-pin-share.svg");
-        mask-image: url("/static/icons/map-pin-share.svg");
+    &--map-pin {
+        -webkit-mask-image: url("/static/icons/map-pin.svg");
+        mask-image: url("/static/icons/map-pin.svg");
+
+        &-share {
+            -webkit-mask-image: url("/static/icons/map-pin-share.svg");
+            mask-image: url("/static/icons/map-pin-share.svg");
+        }
     }
     &--menu {
         -webkit-mask-image: url("/static/icons/menu.svg");
@@ -72,6 +98,22 @@
         -webkit-mask-image: url("/static/icons/phone.svg");
         mask-image: url("/static/icons/phone.svg");
     }
+    &--plus {
+        -webkit-mask-image: url("/static/icons/plus.svg");
+        mask-image: url("/static/icons/plus.svg");
+    }
+    &--road {
+        -webkit-mask-image: url("/static/icons/road.svg");
+        mask-image: url("/static/icons/road.svg");
+    }
+    &--search {
+        -webkit-mask-image: url("/static/icons/search.svg");
+        mask-image: url("/static/icons/search.svg");
+    }
+    &--trash {
+        -webkit-mask-image: url("/static/icons/trash.svg");
+        mask-image: url("/static/icons/trash.svg");
+    }
     &--user {
         -webkit-mask-image: url("/static/icons/user.svg");
         mask-image: url("/static/icons/user.svg");
@@ -79,6 +121,10 @@
         &-circle {
             -webkit-mask-image: url("/static/icons/user-circle.svg");
             mask-image: url("/static/icons/user-circle.svg");
+        }
+        &s {
+            -webkit-mask-image: url("/static/icons/users.svg");
+            mask-image: url("/static/icons/users.svg");
         }
     }
     &--whatsapp {

@@ -1,7 +1,47 @@
 {% extends "base.html" %}
 
-{% block title %}Panel de control{% endblock %}
+{% block title %}Panel de control | Inicio{% endblock %}
 
 {% block hk_content %}
-Hola
+<div class="hk__section">
+    <div class="hk__section__header">
+        <h1 class="text text--title">Resumen general</h1>
+    </div>
+
+    <div class="hk__stats">
+        <div class="hk__stats__card">
+            <div class="hk__stats__card__header">
+                <div class="hk__stats__card__header__icon hk__stats__card__header__icon--primary">
+                    <i class="icon icon--road"></i>
+                </div>
+                <span class="hk__stats__card__header__label">Rodadas a futuro</span>
+            </div>
+            <p class="hk__stats__card__value">{{ upcoming_roadtrips_count | default(0) }}</p>
+            <div class="hk__stats__card__footer">
+                <span>Rodadas programadas próximamente</span>
+                <a class="hk__stats__card__footer__link" href="{{ url_for('admin_views.roadtrips_admin_page') }}">
+                    <span>Ver rodadas</span>
+                    <i class="icon icon--arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="hk__stats__card">
+            <div class="hk__stats__card__header">
+                <div class="hk__stats__card__header__icon hk__stats__card__header__icon--secondary">
+                    <i class="icon icon--users"></i>
+                </div>
+                <span class="hk__stats__card__header__label">Usuarios registrados</span>
+            </div>
+            <p class="hk__stats__card__value">{{ registered_users_count | default(0) }}</p>
+            <div class="hk__stats__card__footer">
+                <span>Integrantes registrados en la plataforma</span>
+                <a class="hk__stats__card__footer__link" href="{{ url_for('admin_views.users_admin_page') }}">
+                    <span>Ver usuarios</span>
+                    <i class="icon icon--arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

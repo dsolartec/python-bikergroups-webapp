@@ -1,0 +1,260 @@
+{% import "helpers/forms.html" as forms_helpers %}
+{% extends "base.html" %}
+
+{% set is_edit = mode == "edit" %}
+
+{% block title %}Panel de control | {{ "Editar rodada" if is_edit else "Crear rodada" }}{% endblock %}
+
+{% block extra_head %}
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+/>
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+></script>
+{% endblock %}
+
+{% block hk_content %}
+<div class="hk__section">
+    <div class="hk__section__header">
+        <h1 class="text text--title">{{ "Editar rodada" if is_edit else "Crear rodada" }}</h1>
+        <a class="button button--secondary" href="{{ url_for('admin_views.roadtrips_admin_page') }}">
+            <i class="button__icon button__icon--left icon icon--arrow-left"></i>
+            <span class="button__text">Volver</span>
+        </a>
+    </div>
+
+    <form
+        class="hk__form"
+        id="roadtrip-form"
+        method="POST"
+        action="{{ url_for('admin_views.edit_roadtrip_admin_page', roadtrip_id=roadtrip.id) if is_edit else url_for('admin_views.create_roadtrip_admin_page') }}"
+    >
+        {% if is_edit %}
+        <input type="hidden" name="roadtrip_id" value="{{ roadtrip.id }}">
+        {% endif %}
+
+        <!-- Información general -->
+        <div class="hk__form__card">
+            <h2 class="hk__form__card__title">Información general</h2>
+
+            <div class="hk__form__field">
+                <div class="hk__form__field__header">
+                    <label class="input__label" for="roadtrip-display_name-field">Nombre de la rodada</label>
+                    <span class="hk__form__char-counter" id="display-name-counter">0 / 120</span>
+                </div>
+                {{
+                    forms_helpers.input(
+                        form_name="roadtrip",
+                        name="display_name",
+                        icon="road",
+                        value=roadtrip.display_name if roadtrip else "",
+                        placeholder="Ej: Rodada nocturna a Las Palmas",
+                        maxlength="120",
+                        required=True
+                    )
+                }}
+            </div>
+
+            <div class="hk__form__field">
+                <div class="hk__form__datetime-grid">
+                    {{
+                        forms_helpers.input(
+                            form_name="roadtrip",
+                            name="start_date",
+                            icon="calendar",
+                            value=roadtrip.start_at.strftime('%Y-%m-%d') if roadtrip and roadtrip.start_at else "",
+                            label="Fecha de inicio",
+                            type="date",
+                            required=True
+                        )
+                    }}
+                    {{
+                        forms_helpers.input(
+                            form_name="roadtrip",
+                            name="start_time",
+                            icon="clock",
+                            value=roadtrip.start_at.strftime('%H:%M') if roadtrip and roadtrip.start_at else "",
+                            label="Hora de inicio",
+                            type="time",
+                            required=True
+                        )
+                    }}
+                </div>
+                <input
+                    type="hidden"
+                    name="start_at"
+                    id="roadtrip-start_at-field"
+                    value="{{ roadtrip.start_at.strftime('%Y-%m-%dT%H:%M') if roadtrip and roadtrip.start_at else '' }}"
+                >
+            </div>
+        </div>
+
+        <!-- Ubicaciones en OpenStreetMap -->
+        <div class="hk__form__locations-grid">
+            <!-- Ubicación de salida -->
+            <div class="hk__form__card">
+                <h2 class="hk__form__card__title">Ubicación de salida</h2>
+                <p class="hk__form__card__subtitle">
+                    Haz clic en el mapa o busca un lugar para seleccionar el punto de encuentro. Puedes personalizar el nombre.
+                </p>
+
+                <div class="hk__form__map-search">
+                    <div class="input">
+                        <div class="input__container">
+                            <div class="input__container__icon input__container__icon--left">
+                                <i class="icon icon--search"></i>
+                            </div>
+                            <input
+                                class="input__container__input"
+                                id="start-map-search-input"
+                                type="text"
+                                placeholder="Buscar lugar de salida en OpenStreetMap..."
+                            >
+                        </div>
+                    </div>
+                    <button class="button button--secondary" type="button" id="start-map-search-btn">
+                        <span class="button__text">Buscar</span>
+                    </button>
+                </div>
+
+                <div class="hk__form__map" id="start-map"></div>
+
+                <div class="hk__form__field">
+                    {{
+                        forms_helpers.input(
+                            form_name="roadtrip",
+                            name="start_location_name",
+                            icon="map-pin",
+                            value=roadtrip.start_coordinates.name if roadtrip and roadtrip.start_coordinates else "",
+                            placeholder="Nombre del punto de salida (personalizable)",
+                            label="Nombre de la ubicación de salida",
+                            required=True
+                        )
+                    }}
+                </div>
+
+                <div class="hk__form__coords-grid">
+                    {{
+                        forms_helpers.input(
+                            form_name="roadtrip",
+                            name="start_latitude",
+                            icon="map-pin-share",
+                            value=roadtrip.start_coordinates.latitude if roadtrip and roadtrip.start_coordinates else "",
+                            placeholder="Latitud",
+                            label="Latitud",
+                            step="any",
+                            readonly=True,
+                            required=True
+                        )
+                    }}
+                    {{
+                        forms_helpers.input(
+                            form_name="roadtrip",
+                            name="start_longitude",
+                            icon="map-pin-share",
+                            value=roadtrip.start_coordinates.longitude if roadtrip and roadtrip.start_coordinates else "",
+                            placeholder="Longitud",
+                            label="Longitud",
+                            step="any",
+                            readonly=True,
+                            required=True
+                        )
+                    }}
+                </div>
+            </div>
+
+            <!-- Ubicación de destino -->
+            <div class="hk__form__card">
+                <h2 class="hk__form__card__title">Ubicación de destino</h2>
+                <p class="hk__form__card__subtitle">
+                    Haz clic en el mapa o busca un lugar para seleccionar el destino de la rodada. Puedes personalizar el nombre.
+                </p>
+
+                <div class="hk__form__map-search">
+                    <div class="input">
+                        <div class="input__container">
+                            <div class="input__container__icon input__container__icon--left">
+                                <i class="icon icon--search"></i>
+                            </div>
+                            <input
+                                class="input__container__input"
+                                id="end-map-search-input"
+                                type="text"
+                                placeholder="Buscar destino en OpenStreetMap..."
+                            >
+                        </div>
+                    </div>
+                    <button class="button button--secondary" type="button" id="end-map-search-btn">
+                        <span class="button__text">Buscar</span>
+                    </button>
+                </div>
+
+                <div class="hk__form__map" id="end-map"></div>
+
+                <div class="hk__form__field">
+                    {{
+                        forms_helpers.input(
+                            form_name="roadtrip",
+                            name="end_location_name",
+                            icon="map-pin",
+                            value=roadtrip.end_coordinates.name if roadtrip and roadtrip.end_coordinates else "",
+                            placeholder="Nombre del destino (personalizable)",
+                            label="Nombre de la ubicación de destino",
+                            required=True
+                        )
+                    }}
+                </div>
+
+                <div class="hk__form__coords-grid">
+                    {{
+                        forms_helpers.input(
+                            form_name="roadtrip",
+                            name="end_latitude",
+                            icon="map-pin-share",
+                            value=roadtrip.end_coordinates.latitude if roadtrip and roadtrip.end_coordinates else "",
+                            placeholder="Latitud",
+                            label="Latitud",
+                            step="any",
+                            readonly=True,
+                            required=True
+                        )
+                    }}
+                    {{
+                        forms_helpers.input(
+                            form_name="roadtrip",
+                            name="end_longitude",
+                            icon="map-pin-share",
+                            value=roadtrip.end_coordinates.longitude if roadtrip and roadtrip.end_coordinates else "",
+                            placeholder="Longitud",
+                            label="Longitud",
+                            step="any",
+                            readonly=True,
+                            required=True
+                        )
+                    }}
+                </div>
+            </div>
+        </div>
+
+        <div class="hk__form__actions">
+            <a class="button button--secondary" href="{{ url_for('admin_views.roadtrips_admin_page') }}">
+                <span class="button__text">Cancelar</span>
+            </a>
+            <button class="button button--primary" type="submit">
+                <i class="button__icon button__icon--left icon icon--{{ 'edit' if is_edit else 'plus' }}"></i>
+                <span class="button__text">{{ "Guardar cambios" if is_edit else "Crear rodada" }}</span>
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

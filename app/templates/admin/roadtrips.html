@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}Panel de control | Rodadas{% endblock %}
+
+{% block hk_content %}
+<div class="hk__section">
+    <div class="hk__section__header">
+        <h1 class="text text--title">Rodadas</h1>
+        <a class="button button--primary" href="{{ url_for('admin_views.create_roadtrip_admin_page') }}">
+            <i class="button__icon button__icon--left icon icon--plus"></i>
+            <span class="button__text">Crear rodada</span>
+        </a>
+    </div>
+
+    <div class="hk__table-wrapper">
+        <table class="hk__table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Estado</th>
+                    <th>Fecha de salida</th>
+                    <th>Ubicación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for roadtrip in roadtrips %}
+                <tr>
+                    <td class="hk__table__id" title="{{ roadtrip.id }}">
+                        <code>{{ roadtrip.id[:8] }}...</code>
+                    </td>
+                    <td class="hk__table__name">
+                        <b>{{ roadtrip.display_name }}</b>
+                    </td>
+                    <td>
+                        {% if roadtrip.status == 'upcoming' %}
+                        <span class="hk__badge hk__badge--upcoming">Próxima</span>
+                        {% elif roadtrip.status == 'ongoing' %}
+                        <span class="hk__badge hk__badge--ongoing">En curso</span>
+                        {% else %}
+                        <span class="hk__badge hk__badge--completed">Finalizada</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="hk__table__datetime">
+                            <span>{{ roadtrip.start_at.strftime('%d/%m/%Y') }}</span>
+                            <small>{{ roadtrip.start_at.strftime('%H:%M') }} hrs</small>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="hk__table__locations">
+                            <span class="hk__table__locations__item">
+                                <b>Salida:</b> {{ roadtrip.start_coordinates.name }}
+                            </span>
+                            <span class="hk__table__locations__item">
+                                <b>Destino:</b> {{ roadtrip.end_coordinates.name }}
+                            </span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="hk__table__actions">
+                            <a
+                                class="button button--secondary hk__table__actions__btn"
+                                href="{{ url_for('admin_views.edit_roadtrip_admin_page', roadtrip_id=roadtrip.id) }}"
+                                title="Editar rodada"
+                            >
+                                <i class="icon icon--edit"></i>
+                                <span class="button__text">Editar</span>
+                            </a>
+                            <button
+                                class="button button--danger hk__table__actions__btn"
+                                type="button"
+                                data-open-delete-modal
+                                data-roadtrip-id="{{ roadtrip.id }}"
+                                data-roadtrip-name="{{ roadtrip.display_name }}"
+                                title="Eliminar rodada"
+                            >
+                                <i class="icon icon--trash"></i>
+                                <span class="button__text">Eliminar</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="hk__table__empty">
+                        No hay rodadas registradas actualmente.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if max_pages and max_pages > 1 %}
+    <div class="roadtrips-page__pagination hk__pagination">
+        <a class="roadtrips-page__pagination__button" href="{{ url_for('admin_views.roadtrips_admin_page', page=1) }}">
+            <i class="icon icon--chevron-left-pipe"></i>
+        </a>
+        <a
+            class="roadtrips-page__pagination__button"
+            href="{{ url_for('admin_views.roadtrips_admin_page', page=current_page-1 if current_page > 1 else 1) }}"
+        >
+            <i class="icon icon--chevron-left"></i>
+        </a>
+        {% for page_number in range(max_pages) %}
+        <a
+            class="roadtrips-page__pagination__button {{ 'roadtrips-page__pagination__button--active' if current_page == (page_number + 1) else '' }}"
+            href="{{ url_for('admin_views.roadtrips_admin_page', page=page_number+1) }}"
+        >
+            {{ page_number + 1 }}
+        </a>
+        {% endfor %}
+        <a
+            class="roadtrips-page__pagination__button"
+            href="{{ url_for('admin_views.roadtrips_admin_page', page=current_page+1 if current_page < max_pages else max_pages) }}"
+        >
+            <i class="icon icon--chevron-right"></i>
+        </a>
+        <a class="roadtrips-page__pagination__button" href="{{ url_for('admin_views.roadtrips_admin_page', page=max_pages) }}">
+            <i class="icon icon--chevron-right-pipe"></i>
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Modal de confirmación para eliminar rodada -->
+<div class="hk__modal" id="delete-roadtrip-modal" aria-hidden="true">
+    <div class="hk__modal__backdrop" data-close-delete-modal></div>
+    <div class="hk__modal__content">
+        <div class="hk__modal__content__header">
+            <h3 class="text text--title">Eliminar rodada</h3>
+            <button type="button" class="hk__modal__content__header__close" data-close-delete-modal>
+                <i class="icon icon--close"></i>
+            </button>
+        </div>
+        <p class="hk__modal__content__body">
+            ¿Estás seguro de que deseas eliminar la rodada <b id="delete-roadtrip-name"></b>? Esta acción no se puede deshacer.
+        </p>
+        <form id="delete-roadtrip-form" class="hk__modal__content__actions" method="POST" action="">
+            <input type="hidden" name="roadtrip_id" id="delete-roadtrip-id" value="">
+            <button type="button" class="button button--secondary" data-close-delete-modal>
+                <span class="button__text">Cancelar</span>
+            </button>
+            <button type="submit" class="button button--danger">
+                <i class="button__icon button__icon--left icon icon--trash"></i>
+                <span class="button__text">Confirmar eliminación</span>
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}
