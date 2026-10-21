@@ -20,7 +20,7 @@ web_views = Blueprint("web_views", __name__)
 message_bus = bootstrap()
 
 
-@web_views.before_app_request
+@web_views.before_request
 def load_logged_user_from_session():
     g.in_hk = False
 
@@ -34,8 +34,9 @@ def load_logged_user_from_session():
         g.can_hk = False
         g.user = message_bus.handle(GetUserByIDCommand(id=user_id, with_permissions=True))
 
+        user_permissions = [up.name for up in g.user.permissions]
         for permission in [PermissionEnum.CAN_CREATE_ROADTRIP, PermissionEnum.CAN_UPDATE_ROADTRIP]:
-            if permission in g.user.permissions:
+            if permission in user_permissions:
                 g.can_hk = True
                 break
     except NotFoundException:
