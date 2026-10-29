@@ -1,3 +1,4 @@
+import os
 from typing import Optional
 
 from flask import request
@@ -7,6 +8,7 @@ from app.domain.commands.create_one_roadtrip_command import CreateOneRoadTripCom
 from app.domain.commands.delete_one_roadtrip_command import DeleteOneRoadTripCommand
 from app.domain.commands.get_all_roadtrips_paginated_command import GetAllRoadtripsPaginatedCommand
 from app.domain.commands.get_roadtrip_by_id_command import GetRoadTripByIDCommand
+from app.domain.commands.update_one_roadtrip_command import UpdateOneRoadTripCommand
 from app.domain.commands.update_roadtrip_photo_command import UpdateRoadTripPhotoCommand
 from app.domain.enums.audit_log_action_enum import AuditLogActionEnum
 from app.domain.exceptions.bad_request_exception import BadRequestException
@@ -52,7 +54,45 @@ class RoadTripsUseCases:
             message_bus: AbstractMessageBus,
             container: AbstractContainer,
     ) -> None:
-        pass
+        with container.unit_of_work() as uow:
+            roadtrip = uow.roadtrip_repository.get_by_id(cmd.roadtrip_id)
+
+            uow.roadtrip_repository.delete(cmd.roadtrip_id)
+
+            photo_path = f"./app/static/images/roadtrips/{cmd.roadtrip_id}.jpeg"
+            if os.path.exists(photo_path):
+                os.remove(photo_path)
+
+            uow.audit_log_repository.save(AuditLogModel(
+                actor_id=cmd.actor_id,
+                action=AuditLogActionEnum.ROADTRIP_DELETED,
+                metadata=roadtrip.model_dump(exclude=["created_at", "created_by", "updated_at", "updated_by"]),
+            ))
+
+    @staticmethod
+    def update_one(
+            cmd: UpdateOneRoadTripCommand,
+            message_bus: AbstractMessageBus,
+            container: AbstractContainer,
+    ) -> RoadTripModel:
+        with container.unit_of_work() as uow:
+            roadtrip = uow.roadtrip_repository.get_by_id(cmd.roadtrip_id)
+
+            roadtrip.display_name = cmd.display_name
+            roadtrip.start_at = cmd.start_at
+            roadtrip.start_coordinates = cmd.start_coordinates
+            roadtrip.end_coordinates = cmd.end_coordinates
+            roadtrip.updated_by = cmd.actor_id
+
+            uow.roadtrip_repository.update(roadtrip)
+
+            uow.audit_log_repository.save(AuditLogModel(
+                actor_id=cmd.actor_id,
+                action=AuditLogActionEnum.ROADTRIP_UPDATED,
+                metadata=roadtrip.model_dump(exclude=["created_at", "created_by", "updated_at", "updated_by"]),
+            ))
+
+            return roadtrip
 
     @staticmethod
     def get_all_paginated(

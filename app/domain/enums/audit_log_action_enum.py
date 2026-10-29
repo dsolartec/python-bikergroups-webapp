@@ -8,4 +8,6 @@ class AuditLogActionEnum(Enum):
 
     # Roadtrips actions
     ROADTRIP_CREATED = "roadtrip_created"
+    ROADTRIP_DELETED = "roadtrip_deleted"
     ROADTRIP_PHOTO_UPDATED = "roadtrip_photo_updated"
+    ROADTRIP_UPDATED = "roadtrip_updated"

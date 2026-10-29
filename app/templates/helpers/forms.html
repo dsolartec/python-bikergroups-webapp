@@ -1,4 +1,4 @@
-{% macro input(form_name, name, icon, value="", placeholder="", type="text", label="", maxlength="", min="", max="", step="", readonly=False, required=False) -%}
+{% macro input(form_name, name, icon, value="", placeholder="", type="text", label="", maxlength="", min="", max="", step="", accept="", readonly=False, required=False) -%}
 <div class="input" id="{{ form_name }}-{{ name }}">
     {% if label %}
     <label class="input__label" for="{{ form_name }}-{{ name }}-field">{{ label }}</label>
@@ -18,6 +18,7 @@
             {% if min != "" %}min="{{ min }}"{% endif %}
             {% if max != "" %}max="{{ max }}"{% endif %}
             {% if step != "" %}step="{{ step }}"{% endif %}
+            {% if accept %}accept="{{ accept }}"{% endif %}
             {% if readonly %}readonly{% endif %}
             {% if required %}required{% endif %}
         >

@@ -63,6 +63,30 @@ if (dateInput && timeInput && startAtHiddenInput) {
     });
 }
 
+// Vista previa de la imagen de la rodada (crear y editar)
+const roadtripFileInput = document.getElementById("roadtrip-file-field");
+const roadtripPreviewImg = document.getElementById("roadtrip-image-preview");
+const roadtripPreviewPlaceholder = document.getElementById("roadtrip-image-preview-placeholder");
+
+if (roadtripPreviewImg && roadtripPreviewPlaceholder) {
+    roadtripPreviewImg.addEventListener("error", () => {
+        roadtripPreviewImg.classList.add("hk__form__image-preview__img--hidden");
+        roadtripPreviewPlaceholder.classList.remove("hk__form__image-preview__placeholder--hidden");
+    });
+}
+
+if (roadtripFileInput && roadtripPreviewImg && roadtripPreviewPlaceholder) {
+    roadtripFileInput.addEventListener("change", () => {
+        const file = roadtripFileInput.files && roadtripFileInput.files[0];
+        if (!file) return;
+
+        const objectUrl = URL.createObjectURL(file);
+        roadtripPreviewImg.src = objectUrl;
+        roadtripPreviewImg.classList.remove("hk__form__image-preview__img--hidden");
+        roadtripPreviewPlaceholder.classList.add("hk__form__image-preview__placeholder--hidden");
+    });
+}
+
 // Selectores de ubicación con OpenStreetMap (Leaflet + Nominatim)
 function initOsmLocationPicker(config) {
     const mapContainer = document.getElementById(config.mapElementId);

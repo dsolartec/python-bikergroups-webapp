@@ -1,8 +1,10 @@
 from datetime import datetime
+from io import BytesIO
 import unittest
 from unittest.mock import MagicMock, patch
 
 from flask import Flask, g, session
+from werkzeug.datastructures import FileStorage
 
 from app.adapters.inputs.admin_views import (
     admin_views,
@@ -13,14 +15,18 @@ from app.adapters.inputs.admin_views import (
     roadtrips_admin_page,
     users_admin_page,
 )
+from app.domain.commands.create_one_roadtrip_command import CreateOneRoadTripCommand
 from app.domain.commands.delete_one_roadtrip_command import DeleteOneRoadTripCommand
 from app.domain.commands.get_admin_stats_command import GetAdminStatsCommand
 from app.domain.commands.get_all_roadtrips_paginated_command import GetAllRoadtripsPaginatedCommand
 from app.domain.commands.get_all_users_paginated_command import GetAllUsersPaginatedCommand
 from app.domain.commands.get_roadtrip_by_id_command import GetRoadTripByIDCommand
 from app.domain.commands.get_user_by_id_command import GetUserByIDCommand
+from app.domain.commands.update_one_roadtrip_command import UpdateOneRoadTripCommand
+from app.domain.commands.update_roadtrip_photo_command import UpdateRoadTripPhotoCommand
 from app.domain.enums.permission_enum import PermissionEnum
 from app.domain.exceptions.not_found_exception import NotFoundException
+from app.domain.models.coordinates_model import CoordinatesModel
 from app.domain.models.permission_model import PermissionModel
 from app.domain.models.user_model import UserModel
 
@@ -161,6 +167,107 @@ class TestAdminViews(unittest.TestCase):
                 "admin/roadtrip_form.html",
                 mode="edit",
                 roadtrip=fake_roadtrip,
+            )
+
+    @patch("app.adapters.inputs.admin_views.message_bus")
+    def test_create_roadtrip_admin_page_post_creates_roadtrip_and_updates_photo(self, mock_bus):
+        created_rt = MagicMock()
+        created_rt.id = "rt-new"
+        mock_bus.handle.side_effect = [created_rt, None]
+
+        file_storage = FileStorage(stream=BytesIO(b"jpeg-data"), filename="cover.jpeg")
+        with self.app.test_request_context(
+            "/admin/roadtrips/create",
+            method="POST",
+            data={
+                "display_name": "Rodada Palmas",
+                "start_at": "2026-12-15T07:30",
+                "start_location_name": "Medellín",
+                "start_latitude": "6.2442",
+                "start_longitude": "-75.5812",
+                "end_location_name": "Alto de Las Palmas",
+                "end_latitude": "6.1612",
+                "end_longitude": "-75.5341",
+                "file": file_storage,
+            },
+        ):
+            g.user = self.admin_user
+            response = create_roadtrip_admin_page()
+
+            self.assertEqual(response.status_code, 302)
+            mock_bus.handle.assert_any_call(
+                CreateOneRoadTripCommand(
+                    display_name="Rodada Palmas",
+                    start_at=datetime(2026, 12, 15, 7, 30),
+                    start_coordinates=CoordinatesModel(
+                        latitude=6.2442,
+                        longitude=-75.5812,
+                        name="Medellín",
+                    ),
+                    end_coordinates=CoordinatesModel(
+                        latitude=6.1612,
+                        longitude=-75.5341,
+                        name="Alto de Las Palmas",
+                    ),
+                    actor_id=self.admin_user.id,
+                )
+            )
+            mock_bus.handle.assert_any_call(
+                UpdateRoadTripPhotoCommand(
+                    actor_id=self.admin_user.id,
+                    roadtrip_id="rt-new",
+                )
+            )
+
+    @patch("app.adapters.inputs.admin_views.message_bus")
+    def test_edit_roadtrip_admin_page_post_updates_roadtrip_and_photo(self, mock_bus):
+        existing_rt = MagicMock()
+        existing_rt.id = "rt-123"
+        mock_bus.handle.side_effect = [existing_rt, existing_rt, None]
+
+        file_storage = FileStorage(stream=BytesIO(b"jpeg-data"), filename="updated.jpeg")
+        with self.app.test_request_context(
+            "/admin/roadtrips/rt-123/edit",
+            method="POST",
+            data={
+                "display_name": "Rodada Palmas Editada",
+                "start_at": "2026-12-20T08:00",
+                "start_location_name": "Medellín",
+                "start_latitude": "6.2442",
+                "start_longitude": "-75.5812",
+                "end_location_name": "Alto de Las Palmas",
+                "end_latitude": "6.1612",
+                "end_longitude": "-75.5341",
+                "file": file_storage,
+            },
+        ):
+            g.user = self.admin_user
+            response = edit_roadtrip_admin_page("rt-123")
+
+            self.assertEqual(response.status_code, 302)
+            mock_bus.handle.assert_any_call(
+                UpdateOneRoadTripCommand(
+                    roadtrip_id="rt-123",
+                    display_name="Rodada Palmas Editada",
+                    start_at=datetime(2026, 12, 20, 8, 0),
+                    start_coordinates=CoordinatesModel(
+                        latitude=6.2442,
+                        longitude=-75.5812,
+                        name="Medellín",
+                    ),
+                    end_coordinates=CoordinatesModel(
+                        latitude=6.1612,
+                        longitude=-75.5341,
+                        name="Alto de Las Palmas",
+                    ),
+                    actor_id=self.admin_user.id,
+                )
+            )
+            mock_bus.handle.assert_any_call(
+                UpdateRoadTripPhotoCommand(
+                    actor_id=self.admin_user.id,
+                    roadtrip_id="rt-123",
+                )
             )
 
     @patch("app.adapters.inputs.admin_views.render_template")

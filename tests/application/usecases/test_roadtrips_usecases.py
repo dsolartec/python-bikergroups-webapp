@@ -12,6 +12,7 @@ from app.domain.commands.create_one_roadtrip_command import CreateOneRoadTripCom
 from app.domain.commands.delete_one_roadtrip_command import DeleteOneRoadTripCommand
 from app.domain.commands.get_all_roadtrips_paginated_command import GetAllRoadtripsPaginatedCommand
 from app.domain.commands.get_roadtrip_by_id_command import GetRoadTripByIDCommand
+from app.domain.commands.update_one_roadtrip_command import UpdateOneRoadTripCommand
 from app.domain.commands.update_roadtrip_photo_command import UpdateRoadTripPhotoCommand
 from app.domain.enums.audit_log_action_enum import AuditLogActionEnum
 from app.domain.exceptions.bad_request_exception import BadRequestException
@@ -60,10 +61,44 @@ class TestRoadTripsUseCases(unittest.TestCase):
         saved_log = self.mock_uow.audit_log_repository.save.call_args[0][0]
         self.assertEqual(saved_log.action, AuditLogActionEnum.ROADTRIP_CREATED)
 
-    def test_delete_one_executes_without_error(self):
-        cmd = DeleteOneRoadTripCommand(actor_id="actor-1", roadtrip_id="rt-1")
+    @patch("app.application.usecases.roadtrips_usecases.os.remove")
+    @patch("app.application.usecases.roadtrips_usecases.os.path.exists", return_value=True)
+    def test_delete_one_deletes_roadtrip_removes_photo_and_logs(self, mock_exists, mock_remove):
+        self.mock_uow.roadtrip_repository.get_by_id.return_value = self.roadtrip
+        cmd = DeleteOneRoadTripCommand(
+            actor_id="018f1234-5678-7000-8000-000000000001",
+            roadtrip_id=self.roadtrip.id,
+        )
+
         result = RoadTripsUseCases.delete_one(cmd, self.mock_bus, self.mock_container)
+
         self.assertIsNone(result)
+        self.mock_uow.roadtrip_repository.get_by_id.assert_called_once_with(self.roadtrip.id)
+        self.mock_uow.roadtrip_repository.delete.assert_called_once_with(self.roadtrip.id)
+        mock_remove.assert_called_once_with(f"./app/static/images/roadtrips/{self.roadtrip.id}.jpeg")
+        self.mock_uow.audit_log_repository.save.assert_called_once()
+        saved_log = self.mock_uow.audit_log_repository.save.call_args[0][0]
+        self.assertEqual(saved_log.action, AuditLogActionEnum.ROADTRIP_DELETED)
+
+    def test_update_one_updates_roadtrip_and_saves_audit_log(self):
+        self.mock_uow.roadtrip_repository.get_by_id.return_value = self.roadtrip
+        cmd = UpdateOneRoadTripCommand(
+            roadtrip_id=self.roadtrip.id,
+            display_name="Rodada Actualizada",
+            start_at=datetime(2026, 12, 20, 8, 0, 0),
+            start_coordinates=self.roadtrip.start_coordinates,
+            end_coordinates=self.roadtrip.end_coordinates,
+            actor_id="018f1234-5678-7000-8000-000000000002",
+        )
+
+        result = RoadTripsUseCases.update_one(cmd, self.mock_bus, self.mock_container)
+
+        self.assertEqual(result.display_name, "Rodada Actualizada")
+        self.assertEqual(result.updated_by, "018f1234-5678-7000-8000-000000000002")
+        self.mock_uow.roadtrip_repository.update.assert_called_once_with(self.roadtrip)
+        self.mock_uow.audit_log_repository.save.assert_called_once()
+        saved_log = self.mock_uow.audit_log_repository.save.call_args[0][0]
+        self.assertEqual(saved_log.action, AuditLogActionEnum.ROADTRIP_UPDATED)
 
     def test_get_all_paginated_success(self):
         self.mock_uow.roadtrip_repository.count.return_value = 7

@@ -13,6 +13,10 @@ class RoadTripRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def delete(self, roadtrip_id: str) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
     def get_by_id(self, roadtrip_id: str) -> RoadTripModel:
         raise NotImplementedError
 

@@ -1,17 +1,24 @@
+from datetime import datetime
 from http import HTTPMethod
 
-from flask import Blueprint, g, render_template, request, session
+from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
 
 from app.adapters.outputs.decorators.require_permissions import require_permissions
+from app.adapters.outputs.libraries.utils import Utils
 from app.bootstrap import bootstrap
+from app.domain.commands.create_one_roadtrip_command import CreateOneRoadTripCommand
 from app.domain.commands.delete_one_roadtrip_command import DeleteOneRoadTripCommand
 from app.domain.commands.get_admin_stats_command import GetAdminStatsCommand
 from app.domain.commands.get_all_roadtrips_paginated_command import GetAllRoadtripsPaginatedCommand
 from app.domain.commands.get_all_users_paginated_command import GetAllUsersPaginatedCommand
 from app.domain.commands.get_roadtrip_by_id_command import GetRoadTripByIDCommand
 from app.domain.commands.get_user_by_id_command import GetUserByIDCommand
+from app.domain.commands.update_one_roadtrip_command import UpdateOneRoadTripCommand
+from app.domain.commands.update_roadtrip_photo_command import UpdateRoadTripPhotoCommand
 from app.domain.enums.permission_enum import PermissionEnum
+from app.domain.exceptions.bad_request_exception import BadRequestException
 from app.domain.exceptions.not_found_exception import NotFoundException
+from app.domain.models.coordinates_model import CoordinatesModel
 
 
 admin_views = Blueprint("admin_views", __name__, url_prefix="/admin")
@@ -85,6 +92,60 @@ def roadtrips_admin_page():
 @admin_views.route("/roadtrips/create", methods=[HTTPMethod.GET, HTTPMethod.POST])
 @require_permissions(permissions=[PermissionEnum.CAN_CREATE_ROADTRIP])
 def create_roadtrip_admin_page():
+    if request.method == HTTPMethod.POST.value:
+        display_name = request.form.get("display_name", default="", type=str).strip()
+
+        start_at_str = request.form.get("start_at", default="", type=str).strip()
+        if not start_at_str:
+            start_date = request.form.get("start_date", default="", type=str).strip()
+            start_time = request.form.get("start_time", default="", type=str).strip()
+            if start_date and start_time:
+                start_at_str = f"{start_date}T{start_time}"
+
+        start_at = datetime.fromisoformat(start_at_str)
+
+        start_location_name = request.form.get("start_location_name", default="", type=str).strip()
+        start_latitude = request.form.get("start_latitude", type=float)
+        start_longitude = request.form.get("start_longitude", type=float)
+
+        end_location_name = request.form.get("end_location_name", default="", type=str).strip()
+        end_latitude = request.form.get("end_latitude", type=float)
+        end_longitude = request.form.get("end_longitude", type=float)
+
+        uploaded_file = request.files.get("file")
+        if uploaded_file and uploaded_file.filename:
+            if not Utils.is_allowed_image_extension(uploaded_file.filename):
+                flash("Debes subir una imagen válida en formato .jpeg", "roadtrip.file.error")
+                return render_template(
+                    "admin/roadtrip_form.html",
+                    mode="create",
+                    roadtrip=None,
+                )
+
+        roadtrip = message_bus.handle(CreateOneRoadTripCommand(
+            display_name=display_name,
+            start_at=start_at,
+            start_coordinates=CoordinatesModel(
+                latitude=start_latitude,
+                longitude=start_longitude,
+                name=start_location_name,
+            ),
+            end_coordinates=CoordinatesModel(
+                latitude=end_latitude,
+                longitude=end_longitude,
+                name=end_location_name,
+            ),
+            actor_id=g.user.id,
+        ))
+
+        if uploaded_file and uploaded_file.filename:
+            message_bus.handle(UpdateRoadTripPhotoCommand(
+                actor_id=g.user.id,
+                roadtrip_id=roadtrip.id,
+            ))
+
+        return redirect(url_for("admin_views.roadtrips_admin_page"))
+
     return render_template(
         "admin/roadtrip_form.html",
         mode="create",
@@ -98,6 +159,63 @@ def edit_roadtrip_admin_page(roadtrip_id: str):
     roadtrip = message_bus.handle(GetRoadTripByIDCommand(
         id=roadtrip_id,
     ))
+    if roadtrip is None:
+        return redirect(url_for("admin_views.roadtrips_admin_page"))
+
+    if request.method == HTTPMethod.POST.value:
+        display_name = request.form.get("display_name", default="", type=str).strip()
+
+        start_at_str = request.form.get("start_at", default="", type=str).strip()
+        if not start_at_str:
+            start_date = request.form.get("start_date", default="", type=str).strip()
+            start_time = request.form.get("start_time", default="", type=str).strip()
+            if start_date and start_time:
+                start_at_str = f"{start_date}T{start_time}"
+
+        start_at = datetime.fromisoformat(start_at_str)
+
+        start_location_name = request.form.get("start_location_name", default="", type=str).strip()
+        start_latitude = request.form.get("start_latitude", type=float)
+        start_longitude = request.form.get("start_longitude", type=float)
+
+        end_location_name = request.form.get("end_location_name", default="", type=str).strip()
+        end_latitude = request.form.get("end_latitude", type=float)
+        end_longitude = request.form.get("end_longitude", type=float)
+
+        uploaded_file = request.files.get("file")
+        if uploaded_file and uploaded_file.filename:
+            if not Utils.is_allowed_image_extension(uploaded_file.filename):
+                flash("Debes subir una imagen válida en formato .jpeg", "roadtrip.file.error")
+                return render_template(
+                    "admin/roadtrip_form.html",
+                    mode="edit",
+                    roadtrip=roadtrip,
+                )
+
+        roadtrip = message_bus.handle(UpdateOneRoadTripCommand(
+            roadtrip_id=roadtrip_id,
+            display_name=display_name,
+            start_at=start_at,
+            start_coordinates=CoordinatesModel(
+                latitude=start_latitude,
+                longitude=start_longitude,
+                name=start_location_name,
+            ),
+            end_coordinates=CoordinatesModel(
+                latitude=end_latitude,
+                longitude=end_longitude,
+                name=end_location_name,
+            ),
+            actor_id=g.user.id,
+        ))
+
+        if uploaded_file and uploaded_file.filename:
+            message_bus.handle(UpdateRoadTripPhotoCommand(
+                actor_id=g.user.id,
+                roadtrip_id=roadtrip_id,
+            ))
+
+        return redirect(url_for("admin_views.roadtrips_admin_page"))
 
     return render_template(
         "admin/roadtrip_form.html",

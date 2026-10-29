@@ -33,6 +33,7 @@
         class="hk__form"
         id="roadtrip-form"
         method="POST"
+        enctype="multipart/form-data"
         action="{{ url_for('admin_views.edit_roadtrip_admin_page', roadtrip_id=roadtrip.id) if is_edit else url_for('admin_views.create_roadtrip_admin_page') }}"
     >
         {% if is_edit %}
@@ -92,6 +93,34 @@
                     id="roadtrip-start_at-field"
                     value="{{ roadtrip.start_at.strftime('%Y-%m-%dT%H:%M') if roadtrip and roadtrip.start_at else '' }}"
                 >
+            </div>
+
+            <div class="hk__form__field">
+                {{
+                    forms_helpers.input(
+                        form_name="roadtrip",
+                        name="file",
+                        icon="road",
+                        label="Foto de la rodada (.jpeg)" if not is_edit else "Actualizar foto de la rodada (.jpeg, opcional)",
+                        type="file",
+                        accept=".jpeg,image/jpeg",
+                        required=not is_edit
+                    )
+                }}
+                <div class="hk__form__image-preview" id="roadtrip-image-preview-container">
+                    <img
+                        class="hk__form__image-preview__img {{ '' if is_edit and roadtrip else 'hk__form__image-preview__img--hidden' }}"
+                        id="roadtrip-image-preview"
+                        src="{{ '/static/images/roadtrips/' ~ roadtrip.id ~ '.jpeg' if is_edit and roadtrip else '' }}"
+                        alt="Vista previa de la rodada"
+                    >
+                    <span
+                        class="hk__form__image-preview__placeholder {{ 'hk__form__image-preview__placeholder--hidden' if is_edit and roadtrip else '' }}"
+                        id="roadtrip-image-preview-placeholder"
+                    >
+                        Selecciona una imagen (.jpeg) para ver la vista previa
+                    </span>
+                </div>
             </div>
         </div>
 

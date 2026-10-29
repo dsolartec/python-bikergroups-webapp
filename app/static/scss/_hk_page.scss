@@ -429,6 +429,42 @@
             }
         }
 
+        &__image-preview {
+            align-items: center;
+            background-color: base.$background-color;
+            border: 1px dashed rgba(white, 0.2);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            margin-top: 8px;
+            min-height: 220px;
+            overflow: hidden;
+            padding: 12px;
+            width: 100%;
+
+            &__img {
+                border-radius: 6px;
+                display: block;
+                max-height: 360px;
+                max-width: 100%;
+                object-fit: contain;
+
+                &--hidden {
+                    display: none;
+                }
+            }
+
+            &__placeholder {
+                color: rgba(white, 0.55);
+                font-size: 13px;
+                text-align: center;
+
+                &--hidden {
+                    display: none;
+                }
+            }
+        }
+
         &__locations-grid {
             display: grid;
             gap: 24px;

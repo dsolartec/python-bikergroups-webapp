@@ -82,6 +82,17 @@
             outline: none;
             padding: 0 12px;
 
+            &[type="file"] {
+                align-content: center;
+                cursor: pointer;
+                padding-block: 6px;
+
+                &::file-selector-button {
+                    cursor: pointer;
+                    margin-right: 10px;
+                }
+            }
+
             &:has( + #{$self}__icon--right) {
                 border-radius: 0;
             }

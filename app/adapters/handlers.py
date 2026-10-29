@@ -14,6 +14,7 @@ from app.domain.commands.get_roadtrip_by_id_command import GetRoadTripByIDComman
 from app.domain.commands.get_user_by_id_command import GetUserByIDCommand
 from app.domain.commands.signin_command import SignInCommand
 from app.domain.commands.signup_command import SignUpCommand
+from app.domain.commands.update_one_roadtrip_command import UpdateOneRoadTripCommand
 from app.domain.commands.update_roadtrip_photo_command import UpdateRoadTripPhotoCommand
 
 
@@ -27,6 +28,7 @@ COMMAND_HANDLERS: dict[Type[BaseCommand], Callable] = {
     DeleteOneRoadTripCommand: RoadTripsUseCases.delete_one,
     GetAllRoadtripsPaginatedCommand: RoadTripsUseCases.get_all_paginated,
     GetRoadTripByIDCommand: RoadTripsUseCases.get_by_id,
+    UpdateOneRoadTripCommand: RoadTripsUseCases.update_one,
     UpdateRoadTripPhotoCommand: RoadTripsUseCases.update_photo,
 
     # Users usecases

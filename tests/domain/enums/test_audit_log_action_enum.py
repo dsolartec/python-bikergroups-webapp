@@ -8,8 +8,10 @@ class TestAuditLogActionEnum(unittest.TestCase):
         self.assertEqual(AuditLogActionEnum.SIGN_IN.value, "sign_in")
         self.assertEqual(AuditLogActionEnum.SIGN_UP.value, "sign_up")
         self.assertEqual(AuditLogActionEnum.ROADTRIP_CREATED.value, "roadtrip_created")
+        self.assertEqual(AuditLogActionEnum.ROADTRIP_DELETED.value, "roadtrip_deleted")
         self.assertEqual(
             AuditLogActionEnum.ROADTRIP_PHOTO_UPDATED.value,
             "roadtrip_photo_updated",
         )
+        self.assertEqual(AuditLogActionEnum.ROADTRIP_UPDATED.value, "roadtrip_updated")
 

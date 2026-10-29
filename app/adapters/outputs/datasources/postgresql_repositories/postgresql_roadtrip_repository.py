@@ -27,6 +27,14 @@ class PostgreSQLRoadTripRepository(RoadTripRepository):
                     .filter(RoadTripEntity.start_at > func.current_timestamp())
         ) or 0
 
+    def delete(self, roadtrip_id: str) -> None:
+        roadtrip_entity = self._session.scalar(select(RoadTripEntity).where(RoadTripEntity.id == UUID(roadtrip_id)))
+        if roadtrip_entity is None:
+            raise NotFoundException("Roadtrip not found")
+
+        self._session.delete(roadtrip_entity)
+        self._session.commit()
+
     def get_by_id(self, roadtrip_id: str) -> RoadTripModel:
         roadtrip_entity = self._session.scalar(select(RoadTripEntity).where(RoadTripEntity.id == UUID(roadtrip_id)))
         if roadtrip_entity is None:
@@ -62,8 +70,13 @@ class PostgreSQLRoadTripRepository(RoadTripRepository):
 
         roadtrip.updated_at = datetime.now()
 
+        values = roadtrip.model_dump(exclude=["id", "created_at", "created_by"], exclude_none=True)
+        values["start_at"] = roadtrip.start_at
+        values["updated_at"] = roadtrip.updated_at
+        values["updated_by"] = UUID(roadtrip.updated_by)
+
         self._session.query(RoadTripEntity) \
             .filter(RoadTripEntity.id == UUID(roadtrip.id)) \
-                .update(roadtrip.model_dump(exclude=["id"], exclude_none=True))
+                .update(values)
 
         self._session.commit()

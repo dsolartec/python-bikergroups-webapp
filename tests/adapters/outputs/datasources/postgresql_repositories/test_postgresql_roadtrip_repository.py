@@ -38,6 +38,20 @@ class TestPostgreSQLRoadTripRepository(unittest.TestCase):
         self.mock_session.scalar.return_value = 3
         self.assertEqual(self.repo.count_upcoming(), 3)
 
+    def test_delete_found(self):
+        mock_entity = MagicMock()
+        self.mock_session.scalar.return_value = mock_entity
+
+        self.repo.delete("018f1234-5678-7000-8000-000000000099")
+
+        self.mock_session.delete.assert_called_once_with(mock_entity)
+        self.mock_session.commit.assert_called_once()
+
+    def test_delete_not_found_raises_exception(self):
+        self.mock_session.scalar.return_value = None
+        with pytest.raises(NotFoundException, match="Roadtrip not found"):
+            self.repo.delete("018f1234-5678-7000-8000-000000000099")
+
     def test_get_by_id_found(self):
         mock_entity = MagicMock()
         mock_entity.to_model.return_value = self.sample_roadtrip
