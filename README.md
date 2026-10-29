@@ -52,3 +52,17 @@ FLASK_SECRET_KEY=
 ```
 
 ### 3. Read the "[Deploying to production](https://flask.palletsprojects.com/en/stable/deploying/)" Flask guide
+
+## Running tests
+
+### Using pytest
+
+```bash
+poetry run pytest -v
+```
+
+### Using unittest
+
+```bash
+poetry run python -m unittest discover -s tests
+```
