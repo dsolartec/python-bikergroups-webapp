@@ -6,6 +6,7 @@ from app.application.usecases.roadtrips_usecases import RoadTripsUseCases
 from app.application.usecases.users_usecases import UsersUseCases
 from app.domain.commands.base_command import BaseCommand
 from app.domain.commands.create_one_roadtrip_command import CreateOneRoadTripCommand
+from app.domain.commands.delete_one_roadtrip_command import DeleteOneRoadTripCommand
 from app.domain.commands.get_admin_stats_command import GetAdminStatsCommand
 from app.domain.commands.get_all_roadtrips_paginated_command import GetAllRoadtripsPaginatedCommand
 from app.domain.commands.get_all_users_paginated_command import GetAllUsersPaginatedCommand
@@ -23,6 +24,7 @@ COMMAND_HANDLERS: dict[Type[BaseCommand], Callable] = {
 
     # Roadtrips usecases
     CreateOneRoadTripCommand: RoadTripsUseCases.create_one,
+    DeleteOneRoadTripCommand: RoadTripsUseCases.delete_one,
     GetAllRoadtripsPaginatedCommand: RoadTripsUseCases.get_all_paginated,
     GetRoadTripByIDCommand: RoadTripsUseCases.get_by_id,
     UpdateRoadTripPhotoCommand: RoadTripsUseCases.update_photo,

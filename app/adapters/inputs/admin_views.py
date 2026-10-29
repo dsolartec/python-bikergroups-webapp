@@ -4,6 +4,7 @@ from flask import Blueprint, g, render_template, request, session
 
 from app.adapters.outputs.decorators.require_permissions import require_permissions
 from app.bootstrap import bootstrap
+from app.domain.commands.delete_one_roadtrip_command import DeleteOneRoadTripCommand
 from app.domain.commands.get_admin_stats_command import GetAdminStatsCommand
 from app.domain.commands.get_all_roadtrips_paginated_command import GetAllRoadtripsPaginatedCommand
 from app.domain.commands.get_all_users_paginated_command import GetAllUsersPaginatedCommand
@@ -55,9 +56,17 @@ def index_admin_page():
     )
 
 
-@admin_views.get("/roadtrips")
+@admin_views.route("/roadtrips", methods=[HTTPMethod.GET, HTTPMethod.POST])
 @require_permissions(permissions=[PermissionEnum.CAN_CREATE_ROADTRIP, PermissionEnum.CAN_UPDATE_ROADTRIP])
 def roadtrips_admin_page():
+    if request.method == HTTPMethod.POST.value:
+        roadtrip_id = request.form.get("roadtrip_id", type=str)
+
+        message_bus.handle(DeleteOneRoadTripCommand(
+            actor_id=g.user.id,
+            roadtrip_id=roadtrip_id,
+        ))
+
     current_page = request.args.get("page", default=1, type=int)
 
     page_roadtrips, _, max_pages = message_bus.handle(GetAllRoadtripsPaginatedCommand(

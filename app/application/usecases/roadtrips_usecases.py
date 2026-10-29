@@ -4,6 +4,7 @@ from flask import request
 
 from app.adapters.outputs.libraries.utils import Utils
 from app.domain.commands.create_one_roadtrip_command import CreateOneRoadTripCommand
+from app.domain.commands.delete_one_roadtrip_command import DeleteOneRoadTripCommand
 from app.domain.commands.get_all_roadtrips_paginated_command import GetAllRoadtripsPaginatedCommand
 from app.domain.commands.get_roadtrip_by_id_command import GetRoadTripByIDCommand
 from app.domain.commands.update_roadtrip_photo_command import UpdateRoadTripPhotoCommand
@@ -44,6 +45,14 @@ class RoadTripsUseCases:
             ))
 
             return roadtrip
+
+    @staticmethod
+    def delete_one(
+            cmd: DeleteOneRoadTripCommand,
+            message_bus: AbstractMessageBus,
+            container: AbstractContainer,
+    ) -> None:
+        pass
 
     @staticmethod
     def get_all_paginated(
